@@ -6,7 +6,7 @@ const App = () => {
   const { user } = useUser({ redirectTo: "/login" });
 
   if (!user?.isLoggedIn) {
-    return <Layout>loading...</Layout>;
+    return <>loading...</>;
   }
   return (
     <Layout>

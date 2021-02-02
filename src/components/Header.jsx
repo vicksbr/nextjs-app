@@ -9,6 +9,7 @@ import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 
 const Header = () => {
   const { user, mutateUser } = useUser();
+  
   const router = useRouter();
   return (
     <header>
