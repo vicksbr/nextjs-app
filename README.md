@@ -1,34 +1,44 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# Example Next.js application using [`next-iron-session`](https://github.com/vvo/next-iron-session)
 
-## Getting Started
+This example creates an authentication system that uses a **signed and encrypted cookie to store session data**. It relies on [`next-iron-session`](https://github.com/vvo/next-iron-session).
 
-First, run the development server:
+It uses current best practices for authentication in the Next.js ecosystem.
 
-```bash
-npm run dev
-# or
-yarn dev
-```
+**Features:**
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+- [Static Generation](https://nextjs.org/docs/basic-features/pages#static-generation-recommended) (SG), recommended example
+- [Server-side Rendering](https://nextjs.org/docs/basic-features/pages#server-side-rendering) (SSR) example in case you need it
+- Logged in status synchronized between browser windows/tabs using **`withUser`** hook and [`swr`](https://swr.now.sh/) module
+- Layout based on logged-in status
+- Session data is signed and encrypted in a cookie
 
-You can start editing the page by modifying `pages/index.js`. The page auto-updates as you edit the file.
+This example creates an authentication system that uses a **signed and encrypted cookie to store session data**. It relies on [`next-iron-session`](https://github.com/vvo/next-iron-session).
 
-[API routes](https://nextjs.org/docs/api-routes/introduction) can be accessed on [http://localhost:3000/api/hello](http://localhost:3000/api/hello). This endpoint can be edited in `pages/api/hello.js`.
+It uses current best practices for authentication in the Next.js ecosystem.
 
-The `pages/api` directory is mapped to `/api/*`. Files in this directory are treated as [API routes](https://nextjs.org/docs/api-routes/introduction) instead of React pages.
+**Features:**
 
-## Learn More
+- [Static Generation](https://nextjs.org/docs/basic-features/pages#static-generation-recommended) (SG), recommended example
+- [Server-side Rendering](https://nextjs.org/docs/basic-features/pages#server-side-rendering) (SSR) example in case you need it
+- Logged in status synchronized between browser windows/tabs using **`withUser`** hook and [`swr`](https://swr.now.sh/) module
+- Layout based on the user's logged-in/out status
+- Session data is signed and encrypted in a cookie
 
-To learn more about Next.js, take a look at the following resources:
+---
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+<p align="center"><b>Online demo at <a href="https://next-iron-session.now.sh/">https://next-iron-session.now.sh/</a> 👀</b></p>
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+---
 
-## Deploy on Vercel
+## Deploy your own
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/import?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+Deploy the example using [ZEIT Now](https://zeit.co/now):
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+[![Deploy with ZEIT Now](https://zeit.co/button)](https://zeit.co/import/project?template=https://github.com/vvo/next-iron-session/tree/master/example)
+
+## ⚠️ Always create your own `SECRET_COOKIE_PASSWORD`
+
+This example hardcode the `SECRET_COOKIE_PASSWORD` environment variable used as a `password` to [`withIronSession`](https://github.com/vvo/next-iron-session#withironsessionhandler--password-ttl-cookiename-cookieoptions-) call. But in the real world you should:
+
+1. Generate your own 32 characters minimum `SECRET_COOKIE_PASSWORD` via https://1password.com/password-generator/ for example
+2. Store this key in a secrets management system like https://zeit.co/docs/v2/serverless-functions/env-and-secrets
