@@ -1,17 +1,15 @@
 import React from "react";
-import PropTypes from "prop-types";
+import Button from "@material-ui/core/Button";
 
 const Form = ({ errorMessage, onSubmit }) => (
   <form onSubmit={onSubmit}>
     <label>
       <span>Username</span>
       <input type="text" name="username" required />
-      <span>Email</span>
+      <span>Password</span>
       <input type="password" name="password" required />
     </label>
-
-    <button type="submit">Login</button>
-
+    <Button type="submit" variant="contained">Login</Button>
     {errorMessage && <p className="error">{errorMessage}</p>}
 
     <style jsx>{`
@@ -39,7 +37,4 @@ const Form = ({ errorMessage, onSubmit }) => (
 
 export default Form;
 
-Form.propTypes = {
-  errorMessage: PropTypes.string,
-  onSubmit: PropTypes.func,
-};
+

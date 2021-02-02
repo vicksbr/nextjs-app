@@ -1,13 +1,12 @@
 import React, { useState } from "react";
 import useUser from "../lib/useUser";
-import Layout from "../components/Layout";
-import Form from "../components/Form";
+import Form from "../src/components/Form";
 import fetchJson from "../lib/fetchJson";
 
 const Login = () => {
   // here we just check if user is already logged in and redirect to profile
   const { mutateUser } = useUser({
-    redirectTo: "/app",
+    redirectTo: "/",
     redirectIfFound: true,
   });
 
@@ -35,7 +34,7 @@ const Login = () => {
   }
 
   return (
-    <Layout>
+    <div className="login-container">
       <div className="login">
         <Form isLogin errorMessage={errorMsg} onSubmit={handleSubmit} />
       </div>
@@ -47,8 +46,15 @@ const Login = () => {
           border: 1px solid #ccc;
           border-radius: 4px;
         }
+        .login-container {
+            max-width: 65rem;
+            margin: 6em auto;
+            padding-left: 1rem;
+            padding-right: 1rem;
+          }
+        }
       `}</style>
-    </Layout>
+    </div>
   );
 };
 

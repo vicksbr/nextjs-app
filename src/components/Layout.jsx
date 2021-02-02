@@ -6,7 +6,7 @@ import PropTypes from "prop-types";
 const Layout = ({ children }) => (
   <>
     <Head>
-      <title>With Iron Session</title>
+      <title>Curatools</title>
     </Head>
     <style jsx global>{`
       *,
@@ -30,11 +30,13 @@ const Layout = ({ children }) => (
         padding-right: 1rem;
       }
     `}</style>
-    <Header />
-
-    <main>
-      <div className="container">{children}</div>
-    </main>
+    
+    <div style={{display: "flex", height: "100vh"}}>
+      <Header />
+      <main>
+        <div className="container">{children}</div>
+      </main>
+    </div>
   </>
 );
 

@@ -1,8 +1,11 @@
 import React from "react";
 import Link from "next/link";
-import useUser from "../lib/useUser";
+import useUser from "../../lib/useUser";
 import { useRouter } from "next/router";
-import fetchJson from "../lib/fetchJson";
+import fetchJson from "../../lib/fetchJson";
+import IconButton from '@material-ui/core/IconButton';
+import ExitToAppIcon from '@material-ui/icons/ExitToApp';
+
 
 const Header = () => {
   const { user, mutateUser } = useUser();
@@ -11,26 +14,8 @@ const Header = () => {
     <header>
       <nav>
         <ul>
-          <li>
-            <Link href="/">
-              <a>Home</a>
-            </Link>
-          </li>
-          {!user?.isLoggedIn && (
-            <li>
-              <Link href="/login">
-                <a>Login</a>
-              </Link>
-            </li>
-          )}
           {user?.isLoggedIn && (
             <>
-              <li>
-                <Link href="/app">
-                  <a> Curatools
-                  </a>
-                </Link>
-              </li>
               <li>
                 <a
                   href="/api/logout"
@@ -42,7 +27,9 @@ const Header = () => {
                     router.push("/login");
                   }}
                 >
-                  Logout
+                  <IconButton color="primary" size="small">
+                    <ExitToAppIcon />
+                  </IconButton>
                 </a>
               </li>
             </>
@@ -50,38 +37,33 @@ const Header = () => {
         </ul>
       </nav>
       <style jsx>{`
+        nav { 
+          height: 100%
+        }
+        
         ul {
           display: flex;
+          height: 100%;
+          margin: 0;
+          padding: 0;
+          flex-direction: column;
           list-style: none;
-          margin-left: 0;
-          padding-left: 0;
         }
 
         li {
-          margin-right: 1rem;
           display: flex;
+          color: white; 
+          background-color: white;
         }
-
-        li:first-child {
-          margin-right: auto;
-          padding-left: 1em;
-        }
-
-        a {
-          color: #fff;
-          text-decoration: none;
-          display: flex;
-          align-items: center;
-        }
-
-        a img {
-          margin-right: 1em;
+        
+        li:last-child {
+          margin-top: auto;
         }
 
         header {
-          padding: 0.2rem;
           color: #fff;
-          background-color: #333;
+          background-color: #6B48FF;
+          padding 0 1em 1em;
         }
       `}</style>
     </header>
