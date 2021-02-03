@@ -5,7 +5,7 @@ import { useRouter } from "next/router";
 import fetchJson from "../../lib/fetchJson";
 import IconButton from '@material-ui/core/IconButton';
 import ExitToAppIcon from '@material-ui/icons/ExitToApp';
-
+import TableChartIcon from '@material-ui/icons/TableChart';
 
 const Header = () => {
   const { user, mutateUser } = useUser();
@@ -17,6 +17,13 @@ const Header = () => {
         <ul>
           {user?.isLoggedIn && (
             <>
+              <li>
+                  <Link href="/edit">
+                  <IconButton color="primary" size="small">
+                    <TableChartIcon />
+                  </IconButton>
+                  </Link>
+              </li>
               <li>
                 <a
                   href="/api/logout"
@@ -64,7 +71,7 @@ const Header = () => {
         header {
           color: #fff;
           background-color: #6B48FF;
-          padding 0 1em 1em;
+          padding 1em 1em 1em;
         }
       `}</style>
     </header>
