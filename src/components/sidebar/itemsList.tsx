@@ -1,29 +1,55 @@
 import React from "react";
-import { List, ListItem, ListItemIcon, ListItemText, useTheme } from "@material-ui/core";
+import {
+  ListItemIcon,
+  ListItemText,
+  useTheme,
+} from "@material-ui/core";
 
-import Flux from "icons/flux";
-import { Window, Layout, Category, Tag } from "types";
+import { typeIconsMap } from "icons";
+import { WindowType, Window, Layout, Category, Tag } from "types";
+
+import { ScrollList, Item } from "./styles";
+
+type ItemIconProps = {
+  type: WindowType;
+  selected: boolean;
+};
+const ItemIcon: React.FC<ItemIconProps> = ({ type, selected }) => {
+  const theme = useTheme();
+  return (
+    <ListItemIcon>
+      {
+        typeIconsMap({
+          htmlColor: selected
+            ? theme.palette.primary.main
+            : theme.palette.grey[400],
+        })[type]
+      }
+    </ListItemIcon>
+  );
+};
 
 type ItemsListProps = {
   items: (Window | Layout | Category | Tag)[];
+  selectedItem: string | null;
+  handleSelectItem: React.Dispatch<React.SetStateAction<string | null>>;
 };
-const ItemsList: React.FC<ItemsListProps> = ({ items }) => {
-  const theme = useTheme();
+const ItemsList: React.FC<ItemsListProps> = ({ items, selectedItem, handleSelectItem }) => {
   return (
-    <List>
+    <ScrollList>
       {items.map(
-        (item: (Window | Layout | Category | Tag) & { type?: string }) => (
-          <ListItem button key={item.name}>
-            {item.type && (
-              <ListItemIcon>
-                <Flux htmlColor={theme.palette.grey[400]} />
-              </ListItemIcon>
-            )}
-            <ListItemText primary={item.name} />
-          </ListItem>
+        ({
+          name,
+          type,
+          id,
+        }: (Window | Layout | Category | Tag) & { type?: WindowType }) => (
+          <Item onClick={() => handleSelectItem(id)} button selected={selectedItem === id} key={id}>
+            {type && <ItemIcon selected={selectedItem === id} type={type} />}
+            <ListItemText disableTypography primary={name} />
+          </Item>
         )
       )}
-    </List>
+    </ScrollList>
   );
 };
 export default ItemsList;

@@ -6,17 +6,16 @@ import {
   Category,
   PowerSettingsNew,
 } from "@material-ui/icons";
-import { Container, Box, List, ListItem } from "@material-ui/core";
+import { Container, Box, List, ListItem, Theme } from "@material-ui/core";
 
-import theme from "theme";
 
-const MainMenuContainer = styled(Container)({
-  backgroundColor: "#6B48FF",
+const MainMenuContainer = styled(Container)(({ theme }) => ({
+  backgroundColor: theme.palette.primary.main,
   height: "100%",
   padding: "0",
   display: "flex",
   flexFlow: "column",
-});
+}));
 
 const LogoContainer = styled(Box)({
   padding: "16px",
@@ -38,20 +37,20 @@ const MainItems = styled(Box)({
 
 type MenuItemProps = {
   selected: boolean;
+  theme: Theme;
 };
-
-const MenuItem = styled(({ selected, ...other }) => <ListItem {...other} />)({
-  opacity: (props: MenuItemProps) => (props.selected ? "1" : "0.66"),
-  backgroundColor: (props: MenuItemProps) =>
-    props.selected ? theme.palette.primary.light : "transparent",
-  height: "88px",
-  justifyContent: "center",
-  transitionProperty: "all",
-  "&:hover": {
-    backgroundColor: (props: MenuItemProps) =>
-    props.selected ? theme.palette.primary.light : "#6141e9",
-  },
-});
+const MenuItem = styled(({ selected, ...other }) => <ListItem {...other} />)(
+  ({ theme, selected }: MenuItemProps) => ({
+    opacity: selected ? "1" : "0.66",
+    backgroundColor: selected ? theme.palette.primary.light : "transparent",
+    height: "88px",
+    justifyContent: "center",
+    transitionProperty: "all",
+    "&:hover": {
+      backgroundColor: selected ? theme.palette.primary.light : "#6141e9",
+    },
+  })
+);
 
 const LogoutItem = styled(MenuItem)({
   alignSelf: "flex-end",

@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Grid } from "@material-ui/core";
+import  Grid  from "@material-ui/core/Grid";
 import { makeStyles, createStyles } from "@material-ui/core/styles";
 
 import MainMenu from "components/mainMenu";
@@ -11,6 +11,7 @@ const useStyles = makeStyles(() =>
   createStyles({
     grid: {
       height: "100vh",
+      flexWrap: "nowrap",
     },
     mainMenu: {
       flexBasis: 88,
@@ -30,6 +31,7 @@ type MainGridProps = {
 };
 const MainGrid: React.FC<MainGridProps> = ({ data }) => {
   const [selectedView, setSelectedView] = useState(null as View | null);
+  const [selectedItem, setSelectedItem] = useState(null as string | null);
   const classes = useStyles();
   return (
     <Grid container className={classes.grid}>
@@ -40,10 +42,17 @@ const MainGrid: React.FC<MainGridProps> = ({ data }) => {
         />
       </Grid>
       <Grid item className={classes.sidebar}>
-        <Sidebar data={data} selectedView={selectedView} />
+        <Sidebar
+          data={data}
+          selectedView={selectedView}
+          selectedItem={selectedItem}
+          handleSelectItem={setSelectedItem}
+        />
       </Grid>
       <Grid item className={classes.display}>
-        <Display />
+        <Display
+          selectedItem={selectedItem}
+        />
       </Grid>
     </Grid>
   );

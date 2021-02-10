@@ -1,7 +1,8 @@
 import React, { useState } from "react";
 import useUser from "../lib/useUser";
-import Form from "../src/components/Form";
+import LoginForm from "../src/components/Login";
 import fetchJson from "../lib/fetchJson";
+import BackgroundLogin from "icons/backgroundLogin";
 
 const Login = () => {
   // here we just check if user is already logged in and redirect to profile
@@ -34,27 +35,8 @@ const Login = () => {
   }
 
   return (
-    <div className="login-container">
-      <div className="login">
-        <Form isLogin errorMessage={errorMsg} onSubmit={handleSubmit} />
-      </div>
-      <style jsx>{`
-        .login {
-          max-width: 21rem;
-          margin: 0 auto;
-          padding: 1rem;
-          border: 1px solid #ccc;
-          border-radius: 4px;
-        }
-        .login-container {
-            max-width: 65rem;
-            margin: 6em auto;
-            padding-left: 1rem;
-            padding-right: 1rem;
-          }
-        }
-      `}</style>
-    </div>
+          <LoginForm isLogin errorMessage={errorMsg} onSubmit={handleSubmit} />
+
   );
 };
 

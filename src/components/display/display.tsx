@@ -1,11 +1,18 @@
 import React from "react";
-import { Container } from "@material-ui/core";
+import { useSelector } from "react-redux";
 
-const styles = {
-  backgroundColor: "#FFFFFF",
-  height: "100%",
-  padding: "48px 78px",
-}
+import type { StoreState } from "../../store/reducers";
 
-const Display: React.FC = () => <Container style={styles}>display</Container>;
-export default Display
+import { DisplayContainer } from "./styles";
+
+type DisplayProps = {
+  selectedItem: string | null;
+};
+const Display: React.FC<DisplayProps> = ({ selectedItem }) => {
+  const selectedView = useSelector<StoreState>((state) => state.display);
+
+  return (
+    <DisplayContainer>{`${selectedView}: ${selectedItem}`}</DisplayContainer>
+  );
+};
+export default Display;

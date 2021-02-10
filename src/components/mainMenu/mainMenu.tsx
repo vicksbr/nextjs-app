@@ -1,10 +1,14 @@
 import React from "react";
-import useUser from "../../../lib/useUser";
 import { useRouter } from "next/router";
+import { useDispatch } from "react-redux";
+
+import Logo from "../../icons/logo";
+import type { View } from "types";
+
+import { selectMenu } from "../../store/actions"
+import useUser from "../../../lib/useUser";
 import fetchJson from "../../../lib/fetchJson";
 
-import Logo from "icons/logo";
-import type { View } from "types";
 
 import {
   MainMenuContainer,
@@ -29,11 +33,8 @@ const MainMenu: React.FC<MainMenuProps> = ({
   setSelectedView,
 }) => {
   const router = useRouter();
-  const { user, mutateUser } = useUser({ redirectTo: "/login" });
-
-  if (!user?.isLoggedIn) {
-    return <>loading...</>;
-  }
+  const dispatch = useDispatch();
+  const { mutateUser } = useUser({ redirectTo: "/login" });
 
   return (
     <MainMenuContainer>
@@ -44,28 +45,41 @@ const MainMenu: React.FC<MainMenuProps> = ({
         <MainItems>
           <MenuItem
             button
-            onClick={() => setSelectedView("windows")}
+            onClick={() => {
+              setSelectedView("windows");
+              dispatch(selectMenu("windows"));
+            }}
             selected={selectedView === "windows"}
           >
             <WindowIcon />
           </MenuItem>
           <MenuItem
             button
-            onClick={() => setSelectedView("layouts")}
+            onClick={() => {
+              setSelectedView("layouts");
+              dispatch(selectMenu("layouts"));
+            }}
             selected={selectedView === "layouts"}
+            
           >
             <LayoutIcon />
           </MenuItem>
           <MenuItem
             button
-            onClick={() => setSelectedView("categories")}
+            onClick={() => {
+              setSelectedView("categories");
+              dispatch(selectMenu("categories"));
+            }}
             selected={selectedView === "categories"}
           >
             <CategoryIcon />
           </MenuItem>
           <MenuItem
             button
-            onClick={() => setSelectedView("tags")}
+            onClick={() => {
+              setSelectedView("tags");
+              dispatch(selectMenu("tags"));
+            }}
             selected={selectedView === "tags"}
           >
             <TagIcon />

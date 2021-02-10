@@ -13,21 +13,25 @@ export type Window = {
   name: string;
   date: Date;
   type: WindowType;
+  id: string;
 };
 
 export type Layout = {
   name: string;
   date: Date;
+  id: string;
 };
 
 export type Category = {
   name: string;
   date: Date;
+  id: string;
 };
 
 export type Tag = {
   name: string;
   date: Date;
+  id: string;
 };
 
 export type CurationData = {
