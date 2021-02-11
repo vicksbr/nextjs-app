@@ -75,9 +75,7 @@ type SortItemProps = {
   order?: Sort["order"];
   theme: Theme;
 };
-const SortItem = styled(({ selected = false, order = "desc", ...other }) => (
-  <Typography {...other} />
-))(({ theme, selected, order }: SortItemProps) => ({
+const SortItem = styled(Typography)(({ theme, selected, order }: SortItemProps) => ({
   color: selected ? theme.palette.grey.A700 : theme.palette.grey[500],
   marginLeft: "36px",
   paddingLeft: selected ? "17px" : 0,
@@ -88,7 +86,8 @@ const SortItem = styled(({ selected = false, order = "desc", ...other }) => (
     marginLeft: 0,
   },
   "&:before": {
-    content: selected ? "''" : "",
+    content: "''",
+    display: selected ? "block" : "none",
     width: 0,
     height: 0,
     border: "5px solid transparent",
