@@ -21,6 +21,7 @@ import {
   CreateIcon,
   SearchIcon,
 } from "./styles";
+import { useRouter } from "next/router";
 
 const compareItems = (sort: Sort) => {
   return (itemA: any, itemB: any) => {
@@ -68,11 +69,18 @@ const Sidebar: React.FC<SidebarProps> = ({
 }) => {
   const theme = useTheme();
   const [sort, setSort] = useState<Sort>({ sortBy: "date", order: "desc" });
+  const router = useRouter();
   const dispatch = useDispatch();
 
   const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     dispatch(updateSearchTerm(event.target.value));
   };
+
+  const handleCreate = () => {
+    dispatch(createItem());
+    if (router.route === '/categories')
+      router.push('/categories/?create=true')
+  }
 
   const searchPlaceholder = selectedView
     ? `Search ${capitalize(selectedView)}`
@@ -119,7 +127,7 @@ const Sidebar: React.FC<SidebarProps> = ({
       )}
       {selectedView && (
         <CreateButton
-          onClick={() => dispatch(createItem())}
+          onClick={() => handleCreate()}
           color="primary"
           variant="extended"
         >

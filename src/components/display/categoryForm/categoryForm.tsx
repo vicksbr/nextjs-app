@@ -5,14 +5,14 @@ import { FormGrid } from "./styles";
 import { FormTitle, FieldLabel } from "../styles";
 
 type CategoryFormProps = {
-  formData?: {
+  initialValues?: {
     name: string;
     rank: number;
   };
 };
-const CategoryForm: React.FC<CategoryFormProps> = ({ formData }) => {
-  const [name, setName] = useState(formData?.name || "");
-  const [rank, setRank] = useState(formData?.rank || 1)
+const CategoryForm: React.FC<CategoryFormProps> = ({ initialValues }) => {
+  const [name, setName] = useState(initialValues?.name ?? "");
+  const [rank, setRank] = useState(initialValues?.rank ?? 1)
 
 
   const handleNameChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -24,11 +24,11 @@ const CategoryForm: React.FC<CategoryFormProps> = ({ formData }) => {
   };
 
   useLayoutEffect(() => {
-    if (formData) {
-      setName(formData.name)
-      setRank(formData.rank)
+    if (initialValues) {
+      setName(initialValues.name)
+      setRank(initialValues.rank)
     }
-  }, [formData]);
+  }, [initialValues]);
 
   return (
     <>

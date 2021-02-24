@@ -22,21 +22,12 @@ const getItem = (id: any) => tags.find((item) => item.id === id)
 
 const TagsDynamic = () => {
 
-  const { query, isReady } = useRouter()
-
-  if (!isReady)
-    return <>Loading</>
-
+  const { query } = useRouter()
   const item = getItem(query.id) ?? { name: '' }
-
 
   return (
     <TagForm values={item} />
   )
 }
-
-// TagsDynamic.getInitialProps = async ({ query }) => {
-//   return { props: getItem(query.id) }
-// }
 
 export default TagsDynamic

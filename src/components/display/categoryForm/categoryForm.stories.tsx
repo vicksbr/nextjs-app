@@ -7,7 +7,7 @@ export default {
   title: "CategoryForm",
   component: CategoryForm,
   args: {
-    formValues: {
+    initialValues: {
       name: "",
     },
   },
@@ -20,7 +20,7 @@ const Template: Story<CategoryFormProps> = (args) => <CategoryForm {...args} />;
 export const Default = Template.bind({});
 export const InitialValue = Template.bind({});
 InitialValue.args = {
-  formData: {
+  initialValues: {
     name: "New Category Name",
     rank: 2,
   },

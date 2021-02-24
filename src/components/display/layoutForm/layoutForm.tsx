@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { OutlinedInput, Switch } from "@material-ui/core";
 
 import ThumbnailPicker from "components/thumbnailPicker";
@@ -47,12 +47,18 @@ const LayoutForm: React.FC<LayoutFormProps> = ({
     }));
   };
 
+  useEffect(() => {
+    if (initialValues) {
+      updateValue('name', initialValues.name)
+      updateValue('status', initialValues.status)
+      updateValue('rank', initialValues.rank)
+    }
+  }, [initialValues]);
+
   const changeHandlers = {
-    name: (event: React.ChangeEvent<HTMLInputElement>) =>
-      updateValue("name", getChangeEventValue(event)),
+    name: (event: React.ChangeEvent<HTMLInputElement>) => updateValue("name", getChangeEventValue(event)),
     status: () => updateValue("status", !values.status),
-    rank: (event: React.ChangeEvent<HTMLInputElement>) =>
-      updateValue("rank", getChangeEventValue(event)),
+    rank: (event: React.ChangeEvent<HTMLInputElement>) => updateValue("rank", getChangeEventValue(event)),
   };
 
   return (
@@ -68,7 +74,7 @@ const LayoutForm: React.FC<LayoutFormProps> = ({
           />
         </NameField>
         <ThumbnailField>
-          <ThumbnailPicker value={values.thumbnail}/>
+          <ThumbnailPicker value={values.thumbnail} />
         </ThumbnailField>
         <StatusField>
           <FieldLabel>Status</FieldLabel>

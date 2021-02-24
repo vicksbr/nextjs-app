@@ -32,11 +32,16 @@ const CategoriesPage: React.FC = () => {
   if (!user?.isLoggedIn || !router.isReady)
     return <>Loading</>
 
-  const { itemid } = router.query
+  console.log(router.query)
+  const { itemid, create } = router.query
+
+  if (create) {
+    return <CategoryForm initialValues={{ name: '', rank: 1 }} />
+  }
 
   return (
     <>
-      {itemid ? <CategoryForm formData={getItem(itemid)} /> : <Empty />}
+      {itemid ? <CategoryForm initialValues={getItem(itemid)} /> : <Empty />}
     </>
   )
 }

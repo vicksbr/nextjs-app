@@ -23,6 +23,7 @@ const useStyles = makeStyles(() =>
     display: {
       flexBasis: 0,
       flexGrow: 1,
+      padding: "48px 78px",
     },
   })
 );
@@ -162,7 +163,7 @@ const data = {
   ],
 };
 
-const getItemById = (type, id) => {
+export const getItemById = (type, id) => {
   return data[type].find((item) => item.id === id);
 };
 
