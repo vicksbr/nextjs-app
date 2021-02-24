@@ -1,0 +1,26 @@
+[
+  {
+    "name": "Game News and Entertainment",
+    "last_update": 1613416087,
+    "type": "flux",
+    "id": "8d52b358-dab4-4665-b734-e9f4a40a56a0",
+    "layout_rank": [
+      {
+        "id": "8d52b358-dab4-4665-b734-e9f4a40a56a0",
+        "rank": 1
+      }
+    ]
+  },
+  {
+    "name": "Ultimas notícias Babilonia",
+    "last_update": 1613416087,
+    "type": "flux",
+    "id": "1d52b358-dab4-4665-b734-ad3da40a56ab",
+    "layout_rank": [
+      {
+        "id": "8d52b358-dab4-4665-b734-e9f4a40a56a0",
+        "rank": 2
+      }
+    ]
+  }
+]

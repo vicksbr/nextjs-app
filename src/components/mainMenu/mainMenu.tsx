@@ -1,10 +1,13 @@
 import React from "react";
-import useUser from "../../../lib/useUser";
 import { useRouter } from "next/router";
-import fetchJson from "../../../lib/fetchJson";
+import { connect, useDispatch } from "react-redux";
 
-import Logo from "icons/logo";
 import type { View } from "types";
+import { selectView, selectItem } from "store/actions";
+import Logo from "icons/logo";
+
+import useUser from "../../../lib/useUser";
+import fetchJson from "../../../lib/fetchJson";
 
 import {
   MainMenuContainer,
@@ -20,19 +23,26 @@ import {
   LogoutIcon,
 } from "./styles";
 
+const WINDOWS_VIEW = "windows"
+const LAYOUTS_VIEW = "layouts"
+const CATEGORIES_VIEW = "categories"
+const TAGS_VIEW = "tags"
+
 type MainMenuProps = {
   selectedView: View | null;
-  setSelectedView: React.Dispatch<React.SetStateAction<View | null>>;
 };
-const MainMenu: React.FC<MainMenuProps> = ({
-  selectedView,
-  setSelectedView,
-}) => {
-  const router = useRouter();
-  const { user, mutateUser } = useUser({ redirectTo: "/login" });
 
-  if (!user?.isLoggedIn) {
-    return <>loading...</>;
+const MainMenu: React.FC<MainMenuProps> = ({ selectedView }) => {
+  const router = useRouter();
+  const dispatch = useDispatch();
+  const { mutateUser } = useUser({ redirectTo: "/login" });
+
+  const handleViewSelect = (toView: View) => {
+    if (selectedView !== toView) {
+      dispatch(selectView(toView))
+      dispatch(selectItem(""))
+      router.push(`/${toView}`)
+    }
   }
 
   return (
@@ -44,29 +54,29 @@ const MainMenu: React.FC<MainMenuProps> = ({
         <MainItems>
           <MenuItem
             button
-            onClick={() => setSelectedView("windows")}
-            selected={selectedView === "windows"}
+            onClick={() => handleViewSelect(WINDOWS_VIEW)}
+            selected={selectedView === WINDOWS_VIEW}
           >
             <WindowIcon />
           </MenuItem>
           <MenuItem
             button
-            onClick={() => setSelectedView("layouts")}
-            selected={selectedView === "layouts"}
+            onClick={() => handleViewSelect(LAYOUTS_VIEW)}
+            selected={selectedView === LAYOUTS_VIEW}
           >
             <LayoutIcon />
           </MenuItem>
           <MenuItem
             button
-            onClick={() => setSelectedView("categories")}
-            selected={selectedView === "categories"}
+            onClick={() => handleViewSelect(CATEGORIES_VIEW)}
+            selected={selectedView === CATEGORIES_VIEW}
           >
             <CategoryIcon />
           </MenuItem>
           <MenuItem
             button
-            onClick={() => setSelectedView("tags")}
-            selected={selectedView === "tags"}
+            onClick={() => handleViewSelect(TAGS_VIEW)}
+            selected={selectedView === TAGS_VIEW}
           >
             <TagIcon />
           </MenuItem>
@@ -86,4 +96,8 @@ const MainMenu: React.FC<MainMenuProps> = ({
   );
 };
 
-export default MainMenu;
+const mapStateToProps = ({ selectedView }: { selectedView: View | null }) => ({
+  selectedView,
+});
+
+export default connect(mapStateToProps)(MainMenu);

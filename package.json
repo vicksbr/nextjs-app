@@ -1,11 +1,14 @@
 {
-  "name": "with-iron-session",
+  "name": "Curatool",
   "version": "1.0.0",
   "private": true,
   "scripts": {
     "build": "next build",
     "dev": "next dev",
-    "start": "next start"
+    "start": "next start",
+    "storybook": "start-storybook -p 6006",
+    "build-storybook": "build-storybook",
+    "compile": "tsc --watch"
   },
   "dependencies": {
     "@emotion/cache": "latest",
@@ -16,14 +19,30 @@
     "@material-ui/icons": "^4.11.2",
     "next": "10.0.5",
     "next-iron-session": "^4.1.10",
+    "next-redux-wrapper": "^6.0.2",
     "react": "17.0.1",
+    "react-cropper": "^2.1.5",
     "react-dom": "17.0.1",
+    "react-dropzone": "^11.3.1",
+    "react-jss": "^10.5.1",
+    "react-redux": "^7.2.2",
+    "redux": "^4.0.5",
+    "redux-promise-middleware": "^6.1.2",
     "swr": "^0.4.1"
   },
   "devDependencies": {
+    "@babel/core": "^7.12.13",
+    "@storybook/addon-actions": "^6.1.17",
+    "@storybook/addon-essentials": "^6.1.17",
+    "@storybook/addon-links": "^6.1.17",
+    "@storybook/react": "^6.1.17",
     "@types/node": "latest",
     "@types/react": "latest",
     "@types/react-dom": "latest",
+    "@types/react-redux": "^7.1.16",
+    "babel-loader": "^8.2.2",
+    "redux-devtools-extension": "^2.13.8",
+    "storybook-addon-material-ui": "^0.9.0-alpha.23",
     "typescript": "latest"
   }
 }

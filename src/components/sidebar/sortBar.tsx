@@ -1,20 +1,47 @@
 import React from "react";
+import { capitalize } from "@material-ui/core";
 
-import type { View, Sort } from "types";
+import type { Sort } from "types";
 
 import { SortBarContainer, SortItem, SortItems, SortLabel } from "./styles";
 
+type SortItemsListProps = {
+  items: Sort["sortBy"][];
+  sort: Sort;
+  handleSortClick: (sortBy: Sort["sortBy"]) => void;
+};
+const SortItemsList: React.FC<SortItemsListProps> = ({
+  items,
+  sort,
+  handleSortClick,
+}) => (
+  <>
+    {items.map((sortBy) => (
+      <SortItem
+        key={sortBy}
+        variant="body2"
+        onClick={() => handleSortClick(sortBy)}
+        selected={sort.sortBy === sortBy}
+        order={sort.order}
+      >
+        {capitalize(sortBy)}
+      </SortItem>
+    ))}
+  </>
+);
+
 type SortBarProps = {
-  selectedView: View | null;
+  items: Sort["sortBy"][];
   sort: Sort;
   setSort: React.Dispatch<React.SetStateAction<Sort>>;
 };
-const SortBar: React.FC<SortBarProps> = ({ selectedView, sort, setSort }) => {
+const SortBar: React.FC<SortBarProps> = ({ items, sort, setSort }) => {
   const toogleSortOrder = () =>
     setSort((prevSort) => ({
       ...prevSort,
       order: prevSort.order === "asc" ? "desc" : "asc",
     }));
+
   const setSortBy = (sortBy: Sort["sortBy"]) =>
     setSort((prevSort) => ({
       ...prevSort,
@@ -28,34 +55,13 @@ const SortBar: React.FC<SortBarProps> = ({ selectedView, sort, setSort }) => {
 
   return (
     <SortBarContainer>
-      <SortLabel variant="overline">sort by</SortLabel>
+      {items.length > 0 && <SortLabel variant="overline">sort by</SortLabel>}
       <SortItems>
-        <SortItem
-          variant="body2"
-          onClick={() => handleSortClick("date")}
-          selected={sort.sortBy === "date"}
-          order={sort.order}
-        >
-          Date
-        </SortItem>
-        <SortItem
-          variant="body2"
-          onClick={() => handleSortClick("name")}
-          selected={sort.sortBy === "name"}
-          order={sort.order}
-        >
-          Name
-        </SortItem>
-        {selectedView === "windows" && (
-          <SortItem
-            variant="body2"
-            onClick={() => handleSortClick("type")}
-            selected={sort.sortBy === "type"}
-            order={sort.order}
-          >
-            Type
-          </SortItem>
-        )}
+        <SortItemsList
+          items={items}
+          handleSortClick={handleSortClick}
+          sort={sort}
+        />
       </SortItems>
     </SortBarContainer>
   );

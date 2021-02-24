@@ -1,11 +1,39 @@
 import React from "react";
-import { Container } from "@material-ui/core";
+import { connect } from "react-redux";
 
-const styles = {
-  backgroundColor: "#FFFFFF",
-  height: "100%",
-  padding: "48px 78px",
-}
+import { Item } from "types";
 
-const Display: React.FC = () => <Container style={styles}>display</Container>;
-export default Display
+import CategoryForm from "./categoryForm";
+import TagForm from "./tagForm";
+import { DisplayContainer } from "./styles";
+
+const mapItemTypeToForm = (props: any) => ({
+  window: <CategoryForm {...props} />,
+  layout: <TagForm {...props} />,
+  category: <CategoryForm {...props} />,
+  tag: <TagForm {...props} />,
+});
+
+type DisplayProps = {
+  selectedItem: Item;
+};
+const Display: React.FC<DisplayProps> = ({ selectedItem }) => {
+  const formProps = selectedItem.data
+    ? { initialValues: { name: selectedItem.data.name } }
+    : null;
+
+  return (
+    <DisplayContainer>
+      {mapItemTypeToForm(formProps)[selectedItem.type]}
+    </DisplayContainer>
+  );
+};
+
+type StateToProps = {
+  selectedItem: Item;
+};
+const mapStateToProps = ({ selectedItem }: StateToProps) => ({
+  selectedItem,
+});
+
+export default connect(mapStateToProps)(Display);

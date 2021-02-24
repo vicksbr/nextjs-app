@@ -1,16 +1,18 @@
-import React, { useState } from "react";
-import { Grid } from "@material-ui/core";
+import React from "react";
+import { useSelector } from "react-redux";
+import Grid from "@material-ui/core/Grid";
 import { makeStyles, createStyles } from "@material-ui/core/styles";
 
 import MainMenu from "components/mainMenu";
 import Sidebar from "components/sidebar";
 import Display from "components/display";
-import type { View, CurationData } from "types";
+import type { CurationData } from "types";
 
 const useStyles = makeStyles(() =>
   createStyles({
     grid: {
       height: "100vh",
+      flexWrap: "nowrap",
     },
     mainMenu: {
       flexBasis: 88,
@@ -25,22 +27,18 @@ const useStyles = makeStyles(() =>
   })
 );
 
-type MainGridProps = {
-  data: CurationData;
-};
-const MainGrid: React.FC<MainGridProps> = ({ data }) => {
-  const [selectedView, setSelectedView] = useState(null as View | null);
+const MainGrid: React.FC = () => {
+  const data = useSelector(
+    ({ itemsData }: { itemsData: CurationData }) => itemsData
+  );
   const classes = useStyles();
   return (
     <Grid container className={classes.grid}>
       <Grid className={classes.mainMenu}>
-        <MainMenu
-          selectedView={selectedView}
-          setSelectedView={setSelectedView}
-        />
+        <MainMenu />
       </Grid>
       <Grid item className={classes.sidebar}>
-        <Sidebar data={data} selectedView={selectedView} />
+        <Sidebar data={data} />
       </Grid>
       <Grid item className={classes.display}>
         <Display />

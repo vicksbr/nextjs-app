@@ -7,13 +7,15 @@ import { ThemeProvider } from "@material-ui/core/styles";
 import { CacheProvider } from "@emotion/react";
 import CssBaseline from "@material-ui/core/CssBaseline";
 import createCache from "@emotion/cache";
+
+import Layout from "components/Layout"
+
 import theme from "../src/theme";
+import { wrapper } from "../src/store/store";
 
 export const cache = createCache({ key: "css", prepend: true });
 
-export default function MyApp(props: AppProps) {
-  const { Component, pageProps } = props;
-
+export const WrappedApp = ({ Component, pageProps }: AppProps) => {
   React.useEffect(() => {
     // Remove the server-side injected CSS.
     const jssStyles = document.querySelector("#jss-server-side");
@@ -23,24 +25,21 @@ export default function MyApp(props: AppProps) {
   }, []);
 
   return (
-    <SWRConfig
-      value={{
-        fetcher: fetch,
-        onError: (err) => {
-          console.error(err);
-        },
-      }}
-    >
-      <CacheProvider value={cache}>
-        <Head>
-          <title>My page</title>
-          <meta name="viewport" content="initial-scale=1, width=device-width" />
-        </Head>
-        <ThemeProvider theme={theme}>
-          <CssBaseline />
-          <Component {...pageProps} />
-        </ThemeProvider>
-      </CacheProvider>
-    </SWRConfig>
+    <CacheProvider value={cache}>
+      <Head>
+        <title>Fluxonaut Curation Tool</title>
+        <meta name="viewport" content="initial-scale=1, width=device-width" />
+      </Head>
+      <ThemeProvider theme={theme}>
+        <CssBaseline />
+        <SWRConfig value={{ fetcher: fetch, onError: (err) => { console.error(err); } }}>
+          <Layout>
+            <Component {...pageProps} />
+          </Layout>
+        </SWRConfig>
+      </ThemeProvider>
+    </CacheProvider>
   );
-}
+};
+
+export default wrapper.withRedux(WrappedApp);
