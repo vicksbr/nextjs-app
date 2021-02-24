@@ -10,6 +10,7 @@ type SortItemsListProps = {
   sort: Sort;
   handleSortClick: (sortBy: Sort["sortBy"]) => void;
 };
+
 const SortItemsList: React.FC<SortItemsListProps> = ({
   items,
   sort,
@@ -22,7 +23,7 @@ const SortItemsList: React.FC<SortItemsListProps> = ({
         variant="body2"
         onClick={() => handleSortClick(sortBy)}
         selected={sort.sortBy === sortBy}
-        order={sort.order}
+        order={sort.order as any}
       >
         {capitalize(sortBy)}
       </SortItem>
