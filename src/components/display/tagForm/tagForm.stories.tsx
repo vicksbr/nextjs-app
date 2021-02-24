@@ -20,7 +20,7 @@ const Template: Story<TagFormProps> = (args) => <TagForm {...args} />;
 export const Default = Template.bind({});
 export const InitialValue = Template.bind({});
 InitialValue.args = {
-  values: {
+  initialValues: {
     name: "New Tag Name"
   }
 };

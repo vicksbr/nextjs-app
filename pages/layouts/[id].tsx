@@ -7,13 +7,10 @@ import { getItemById } from "../../src/components/Layout"
 
 const LayoutsDynamic: React.FC = () => {
     const { user } = useUser({ redirectTo: "/login" });
+    const router = useRouter()
 
     if (!user?.isLoggedIn) return <>Loading</>
-
-    const { query } = useRouter()
-    const item = getItemById('layouts', query.id)
-
-    console.log(item)
+    const item = getItemById('layouts', router.query.id) ?? { name: '' }
 
     return (
         <LayoutForm initialValues={item} />

@@ -29,10 +29,9 @@ const CategoriesPage: React.FC = () => {
   const { user } = useUser({ redirectTo: "/login" });
   const router = useRouter()
 
-  if (!user?.isLoggedIn || !router.isReady)
+  if (!user?.isLoggedIn)
     return <>Loading</>
-
-  console.log(router.query)
+  
   const { itemid, create } = router.query
 
   if (create) {

@@ -77,9 +77,15 @@ const Sidebar: React.FC<SidebarProps> = ({
   };
 
   const handleCreate = () => {
-    dispatch(createItem());
-    if (router.route === '/categories')
+    const basePath = router.pathname.split('/')[1]
+
+    if (basePath === 'categories') {
+      dispatch(createItem());
       router.push('/categories/?create=true')
+      return
+    }
+    dispatch(createItem());
+    router.push(`/${basePath}/?create=true`)
   }
 
   const searchPlaceholder = selectedView
@@ -87,7 +93,6 @@ const Sidebar: React.FC<SidebarProps> = ({
     : "";
 
   const items = selectedView ? data[selectedView] : [];
-
   const sortedItems = [...items].sort(compareItems(sort));
 
   return (

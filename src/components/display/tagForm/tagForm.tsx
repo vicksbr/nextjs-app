@@ -4,19 +4,19 @@ import { FormControl, OutlinedInput } from "@material-ui/core";
 import { FormTitle, FieldLabel } from "../styles";
 
 type TagFormProps = {
-  values?: {
+  initialValues?: {
     name: string;
   };
 };
 
-const TagForm: React.FC<TagFormProps> = ({ values }) => {
-  const [nameValue, setNameValue] = useState(values?.name || "");
+const TagForm: React.FC<TagFormProps> = ({ initialValues }) => {
+  const [nameValue, setNameValue] = useState(initialValues?.name || "");
 
   useEffect(() => {
-    if (values?.name) {
-      setNameValue(values.name);
+    if (initialValues?.name) {
+      setNameValue(initialValues.name);
     }
-  }, [values]);
+  }, [initialValues]);
 
   const handleNameChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setNameValue(event.target.value);

@@ -1,5 +1,7 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Head from "next/head";
+import { useDispatch, useSelector } from "react-redux";
+import { selectView, selectItem } from "store/actions";
 import Grid from "@material-ui/core/Grid";
 import { makeStyles, createStyles } from "@material-ui/core/styles";
 
@@ -7,6 +9,7 @@ import MainMenu from "components/mainMenu";
 import Sidebar from "components/sidebar";
 
 import useUser from "../../lib/useUser";
+import { useRouter } from "next/router";
 
 const useStyles = makeStyles(() =>
   createStyles({
@@ -168,12 +171,41 @@ export const getItemById = (type, id) => {
 };
 
 const Layout = ({ children }) => {
-  const [selectedView, setSelectedView] = useState(null);
-  const [selectedItem, setSelectedItem] = useState("");
-
+  const { user } = useUser({ redirectTo: "/login" });
+  const router = useRouter();
+  const dispatch = useDispatch();
   const classes = useStyles();
 
-  const { user } = useUser({ redirectTo: "/login" });
+  const selectedView = useSelector((state) => state.selectedView);
+  const selectedItem = useSelector((state) => state.selecteItem);
+
+  useEffect(() => {
+    if (router.isReady) {
+      const { create } = router.query;
+      console.log(create);
+
+      if (create) {
+        dispatch(selectView(router.pathname.split("/")[1]));
+        dispatch(selectItem(""));
+        return;
+      }
+
+      if (router.route === "/categories") {
+        dispatch(selectView("categories"));
+        dispatch(selectItem(router.query.itemid));
+        return;
+      }
+      const view = router.asPath.split("/")[1];
+      const item = router.asPath.split("/")[2];
+
+      if (!selectedView) {
+        dispatch(selectView(view));
+      }
+      if (!selectedItem && item) {
+        dispatch(selectItem(item));
+      }
+    }
+  }, [router.isReady]);
 
   if (!user?.isLoggedIn) return <>{children}</>;
 
@@ -181,17 +213,13 @@ const Layout = ({ children }) => {
     <>
       <Grid container className={classes.grid}>
         <Grid className={classes.mainMenu}>
-          <MainMenu
-            selectedView={selectedView}
-            setSelectedView={setSelectedView}
-          />
+          <MainMenu selectedView={selectedView} />
         </Grid>
         <Grid item className={classes.sidebar}>
           <Sidebar
             data={data}
             selectedView={selectedView}
             selectedItem={selectedItem}
-            handleSelectItem={setSelectedItem}
           />
         </Grid>
         <Grid item className={classes.display}>
