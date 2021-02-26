@@ -17,7 +17,7 @@ type LayoutFormProps = {
   initialValues?: {
     name?: string;
     status?: boolean;
-    thumbnail: string;
+    thumbnail?: string;
     rank?: string;
   };
 };

@@ -1,19 +1,14 @@
 import React, { useState } from "react";
 import { useDispatch } from "react-redux";
-
 import LoginForm from "components/Login";
 import { updateItemsData } from "store/actions";
 import { itemsData } from "mockedData";
-
 import useUser from "../lib/useUser";
 import fetchJson from "../lib/fetchJson";
 
 const Login = () => {
-  // here we just check if user is already logged in and redirect to profile
-  const { mutateUser } = useUser({
-    redirectTo: "/",
-    redirectIfFound: true,
-  });
+  const { user, mutateUser } = useUser({ redirectTo: "/", redirectIfFound: true });
+
   const dispatch = useDispatch();
   const [errorMsg, setErrorMsg] = useState("");
 
@@ -38,6 +33,9 @@ const Login = () => {
       setErrorMsg(error.data.message);
     }
   }
+
+
+  if (!user || user?.isLoggedIn) return <>Loading...</>
 
   return <LoginForm isLogin errorMessage={errorMsg} onSubmit={handleSubmit} />;
 };

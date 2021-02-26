@@ -56,8 +56,8 @@ const mapViewToSortItems = (
 type SidebarProps = {
   data: CurationData;
   searchTerm: string;
-  selectedView: View | null;
-  selectedItem: Item;
+  selectedView: any;
+  selectedItem: any;
   layoutFilter: LayoutData | null;
 };
 const Sidebar: React.FC<SidebarProps> = ({
@@ -67,6 +67,7 @@ const Sidebar: React.FC<SidebarProps> = ({
   selectedItem,
   layoutFilter,
 }) => {
+
   const theme = useTheme();
   const [sort, setSort] = useState<Sort>({ sortBy: "date", order: "desc" });
   const router = useRouter();
@@ -78,7 +79,6 @@ const Sidebar: React.FC<SidebarProps> = ({
 
   const handleCreate = () => {
     const basePath = router.pathname.split('/')[1]
-
     if (basePath === 'categories') {
       dispatch(createItem());
       router.push('/categories/?create=true')
@@ -92,7 +92,7 @@ const Sidebar: React.FC<SidebarProps> = ({
     ? `Search ${capitalize(selectedView)}`
     : "";
 
-  const items = selectedView ? data[selectedView] : [];
+  const items = selectedView ? data[selectedView as View] : [];
   const sortedItems = [...items].sort(compareItems(sort));
 
   return (

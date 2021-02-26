@@ -73,7 +73,7 @@ const SortItems = styled(Box)({
 
 type SortItemProps = {
   selected?: boolean;
-  order: Sort["order"];
+  order?: Sort["order"];
   theme: Theme;
 };
 const SortItem = styled(Typography)(

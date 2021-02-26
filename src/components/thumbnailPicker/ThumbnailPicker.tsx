@@ -11,7 +11,7 @@ import styles from "./styles";
 import { FieldLabel } from "components/display/styles";
 
 type ThumbnailPickerProps = {
-  value: string;
+  value?: string;
 };
 const ThumbnailPicker: React.FC<ThumbnailPickerProps> = ({ value }) => {
   const cropperRef = useRef<HTMLImageElement & { cropper: any }>(null);

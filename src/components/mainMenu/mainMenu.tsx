@@ -1,6 +1,6 @@
 import React from "react";
 import { useRouter } from "next/router";
-import { connect, useDispatch } from "react-redux";
+import { connect, useDispatch, useSelector } from "react-redux";
 
 import type { View } from "types";
 import { selectView, selectItem } from "store/actions";
@@ -22,20 +22,20 @@ import {
   TagIcon,
   LogoutIcon,
 } from "./styles";
+import { StoreState } from "store/reducers";
 
 const WINDOWS_VIEW = "windows"
 const LAYOUTS_VIEW = "layouts"
 const CATEGORIES_VIEW = "categories"
 const TAGS_VIEW = "tags"
 
-type MainMenuProps = {
-  selectedView: View | null;
-};
+type MainMenuProps = {};
 
-const MainMenu: React.FC<MainMenuProps> = ({ selectedView }) => {
+const MainMenu: React.FC<MainMenuProps> = () => {
   const router = useRouter();
   const dispatch = useDispatch();
   const { mutateUser } = useUser({ redirectTo: "/login" });
+  const selectedView = useSelector<StoreState>((state) => state.selectedView);
 
   const handleViewSelect = (toView: View) => {
     if (selectedView !== toView) {
