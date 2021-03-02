@@ -13,3 +13,10 @@ export const formatDate = (date: Date): string => {
   ];
   return `${hours}:${minutes} ${day}/${month}/${year}`;
 };
+
+// Usage example: randomDate(new Date(2018, 1, 1), new Date())
+
+export const randomDate = (start: Date, end: Date) =>  {
+  return new Date(start.getTime() + Math.random() * (end.getTime() - start.getTime()));
+}
+

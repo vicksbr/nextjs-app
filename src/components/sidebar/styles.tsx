@@ -12,6 +12,7 @@ import {
   FormControlLabel,
   FormGroup,
   FormControl,
+  ListItemIcon,
 } from "@material-ui/core";
 import AddIcon from "@material-ui/icons/Add";
 import { Search as MaterialSearchIcon } from "@material-ui/icons";
@@ -141,6 +142,20 @@ const Item = styled(({ selected, ...other }) => <ListItem {...other} />)(
   { withTheme: true }
 );
 
+type ItemRankProps = {
+  selected?: boolean;
+  theme: Theme;
+};
+
+const StyledItemIcon = styled(ListItemIcon)({
+  minWidth: 36,
+});
+
+const ItemRank = styled(Typography)(({ theme, selected }: ItemRankProps) => ({
+  color: selected ? theme.palette.primary.main : theme.palette.grey[400],
+  marginRight: 4,
+}));
+
 const CreateButton = styled(Fab)({
   letterSpacing: "1.25px",
   padding: "0 17px 0 12px",
@@ -153,7 +168,7 @@ const CreateIcon = styled(AddIcon)({
   marginRight: "12px",
 });
 
-export { ScrollList, Item, CreateButton, CreateIcon };
+export { ScrollList, Item, StyledItemIcon, ItemRank, CreateButton, CreateIcon };
 // Filters
 const AnchorContainer = styled(Box)({
   position: "relative",

@@ -10,10 +10,10 @@ import TwitterSearch from "./twitterSearch";
 const typeIconsMap = (
   props: SvgIconProps
 ): { [x in WindowType]: JSX.Element } => ({
-  Flux: <Flux {...props} />,
-  Chart: <Chart {...props} />,
-  "Twitter Search": <TwitterSearch {...props} />,
-  "Quotes Table": <QuotesTable {...props} />,
+  flux: <Flux {...props} />,
+  chart: <Chart {...props} />,
+  twittersearch: <TwitterSearch {...props} />,
+  quotestable: <QuotesTable {...props} />,
 });
 
 export { Chart, Flux, QuotesTable, TwitterSearch, typeIconsMap };

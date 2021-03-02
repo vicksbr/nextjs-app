@@ -1,15 +1,13 @@
 import React from "react";
-import { ListItemIcon, ListItemText, useTheme } from "@material-ui/core";
+import { ListItemText, useTheme } from "@material-ui/core";
 
 import { typeIconsMap } from "icons";
+import { WindowType, ItemData, WindowData } from "types";
 
-import {
-  WindowType,
-  ItemData,
-} from "types";
-
-import { ScrollList, Item } from "./styles";
+import { ScrollList, StyledItemIcon, Item, ItemRank } from "./styles";
 import { useRouter } from "next/router";
+import { selectItem } from "store/actions";
+import { useDispatch } from "react-redux";
 
 type ItemIconProps = {
   type: WindowType;
@@ -18,7 +16,7 @@ type ItemIconProps = {
 const ItemIcon: React.FC<ItemIconProps> = ({ type, selected }) => {
   const theme = useTheme();
   return (
-    <ListItemIcon>
+    <StyledItemIcon>
       {
         typeIconsMap({
           htmlColor: selected
@@ -26,53 +24,45 @@ const ItemIcon: React.FC<ItemIconProps> = ({ type, selected }) => {
             : theme.palette.grey[400],
         })[type]
       }
-    </ListItemIcon>
+    </StyledItemIcon>
   );
 };
 
 type ItemsListProps = {
   items: ItemData[];
   selectedItem: string | null;
-  handleSelectItem: (id: string) => void;
+  selectedView: string | null;
 };
 const ItemsList: React.FC<ItemsListProps> = ({
   items,
   selectedItem,
-  handleSelectItem,
 }) => {
 
   const router = useRouter()
+  const dispatch = useDispatch()
 
   const handleClick = (id: string, basePath: string) => {
-    handleSelectItem(id);
-    if (basePath !== "/categories") {
-      router.push(`${basePath}/${id}`);
-      return
-    }
-    router.push(`${basePath}?itemid=${id}`);
+    dispatch(selectItem(id));
+    router.push(`${basePath}/${id}`);
   }
 
   return (
     <ScrollList>
       {items.map(
-        ({
-          name,
-          type,
-          id,
-          basePath,
-        }: ItemData & {
-          type?: WindowType;
-        }) => (
-          <Item
-            onClick={() => handleClick(id, basePath)}
-            button
-            selected={selectedItem === id}
-            key={id}
-          >
-            {type && <ItemIcon selected={selectedItem === id} type={type} />}
-            <ListItemText disableTypography primary={name} />
-          </Item>
-        )
+        ({ name, type, id, rank, basePath }: Omit<ItemData, "type" | "rank"> & { type?: WindowType; rank?: number | WindowData["rank"] }) => {
+          return (
+            <Item
+              button
+              onClick={() => handleClick(id, basePath)}
+              selected={selectedItem === id}
+              key={id}
+            >
+              {type && <ItemIcon selected={selectedItem === id} type={type} />}
+              {rank && (<ItemRank selected={selectedItem === id}>{`${rank}.`}</ItemRank>)}
+              <ListItemText disableTypography primary={name} />
+            </Item>
+          );
+        }
       )}
     </ScrollList>
   );

@@ -10,7 +10,7 @@ import {
   Fade,
 } from "@material-ui/core";
 
-import { WindowTypes, WindowType, CategoryData, LayoutData } from "types";
+import { WindowType, CategoryData, LayoutData } from "types";
 
 import {
   AnchorContainer,
@@ -29,18 +29,18 @@ import {
   ResetButton,
 } from "./styles";
 
-const windowTypes: WindowTypes = [
-  "Flux",
-  "Chart",
-  "Quotes Table",
-  "Twitter Search",
+const windowTypes: {value: WindowType, label: string}[] = [
+  {value: "flux", label: "Flux"},
+  {value: "chart", label: "Chart"},
+  {value: "quotestable", label: "Quotes Table"},
+  {value: "twittersearch", label: "Twitter Search"},
 ];
 
 type TypeBoolMap = { [k in WindowType]: boolean };
 
 const emptyTypesState: TypeBoolMap = windowTypes.reduce(
   (obj: TypeBoolMap, type) => {
-    obj[type] = false;
+    obj[type.value] = false;
     return obj;
   },
   {} as TypeBoolMap
@@ -209,16 +209,16 @@ const Filters: React.FC<FiltersProps> = ({
             <TypesGroup>
               {windowTypes.map((type) => (
                 <TypeFilter
-                  key={type}
+                  key={type.value}
                   control={
                     <Checkbox
                       color="primary"
-                      checked={selectedTypes[type]}
+                      checked={selectedTypes[type.value]}
                       onChange={handleCheckboxChange}
-                      name={type}
+                      name={type.value}
                     />
                   }
-                  label={type}
+                  label={type.label}
                 />
               ))}
             </TypesGroup>

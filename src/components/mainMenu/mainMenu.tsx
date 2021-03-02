@@ -35,6 +35,7 @@ const MainMenu: React.FC<MainMenuProps> = () => {
   const router = useRouter();
   const dispatch = useDispatch();
   const { mutateUser } = useUser({ redirectTo: "/login" });
+  
   const selectedView = useSelector<StoreState>((state) => state.selectedView);
 
   const handleViewSelect = (toView: View) => {
@@ -44,6 +45,7 @@ const MainMenu: React.FC<MainMenuProps> = () => {
       router.push(`/${toView}`)
     }
   }
+  const currentView = router.pathname.split('/')[1]
 
   return (
     <MainMenuContainer>
@@ -55,28 +57,28 @@ const MainMenu: React.FC<MainMenuProps> = () => {
           <MenuItem
             button
             onClick={() => handleViewSelect(WINDOWS_VIEW)}
-            selected={selectedView === WINDOWS_VIEW}
+            selected={currentView === WINDOWS_VIEW}
           >
             <WindowIcon />
           </MenuItem>
           <MenuItem
             button
             onClick={() => handleViewSelect(LAYOUTS_VIEW)}
-            selected={selectedView === LAYOUTS_VIEW}
+            selected={currentView === LAYOUTS_VIEW}
           >
             <LayoutIcon />
           </MenuItem>
           <MenuItem
             button
             onClick={() => handleViewSelect(CATEGORIES_VIEW)}
-            selected={selectedView === CATEGORIES_VIEW}
+            selected={currentView === CATEGORIES_VIEW}
           >
             <CategoryIcon />
           </MenuItem>
           <MenuItem
             button
             onClick={() => handleViewSelect(TAGS_VIEW)}
-            selected={selectedView === TAGS_VIEW}
+            selected={currentView === TAGS_VIEW}
           >
             <TagIcon />
           </MenuItem>

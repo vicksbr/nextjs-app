@@ -19,7 +19,7 @@ type DisplayProps = {
 };
 const Display: React.FC<DisplayProps> = ({ selectedItem }) => {
   const formProps = selectedItem.data
-    ? { initialValues: { name: selectedItem.data.name } }
+    ? { initialValues: selectedItem.data }
     : null;
 
   return (

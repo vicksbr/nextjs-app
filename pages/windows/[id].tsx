@@ -2,19 +2,19 @@ import { useRouter } from "next/router";
 import React from "react";
 
 import useUser from "../../lib/useUser";
-import { getItemById } from "../../src/components/Layout"
+import { getWindowsItemById } from "store/selectors";
+
 
 const WindowsPage: React.FC = () => {
   const { user } = useUser({ redirectTo: "/login" });
-  const { query } = useRouter()
+  const router = useRouter()
+  const item = getWindowsItemById(router.query.id as string)
 
   if (!user?.isLoggedIn) return <>Loading</>
 
-  const item = getItemById('windows', query.id)
-
   return (
     <>
-      <p>Window Page {query.id}</p>
+      <p>Window Page {router.query.id}</p>
       <pre>{JSON.stringify(item, null, 2)}</pre>
     </>
   )

@@ -1,19 +1,20 @@
 import React from "react";
 import LayoutForm from "components/display/layoutForm"
 import { useRouter } from "next/router";
-
 import useUser from "../../lib/useUser";
-import { getItemById } from "../../src/components/Layout"
+import { getLayoutsItemById } from "store/selectors";
+import { LayoutData } from "types";
+
 
 const LayoutsDynamic: React.FC = () => {
     const { user } = useUser({ redirectTo: "/login" });
     const router = useRouter()
+    const item = getLayoutsItemById(router.query.id as string) ?? { name: '' }
 
     if (!user?.isLoggedIn) return <>Loading</>
-    const item = getItemById('layouts', router.query.id) ?? { name: '' }
 
     return (
-        <LayoutForm initialValues={item} />
+        <LayoutForm initialValues={item as LayoutData} />
     )
 }
 

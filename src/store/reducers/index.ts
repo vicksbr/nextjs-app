@@ -23,10 +23,10 @@ export const initialState = {
   itemsData: itemsData,
   filters: {
     types: {
-      Flux: false,
-      Chart: false,
-      "Quotes Table": false,
-      "Twitter Search": false,
+      flux: false,
+      chart: false,
+      quotestable: false,
+      twittersearch: false,
     },
     categories: [],
     layout: null,
@@ -47,11 +47,7 @@ const mapViewToItemType = (view: View | null) => {
   return view ? map[view] : null;
 };
 
-const getItemData = (
-  itemsData: CurationData,
-  view: View | null,
-  itemId: string
-) => {
+const getItemData = ( itemsData: CurationData, view: View | null, itemId: string) => {
   return view ? itemsData[view].find((item) => item.id === itemId) : null;
 };
 

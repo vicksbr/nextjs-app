@@ -1,4 +1,4 @@
-import React, { useState, useLayoutEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { FormControl, OutlinedInput } from "@material-ui/core";
 
 import { FormGrid } from "./styles";
@@ -23,7 +23,7 @@ const CategoryForm: React.FC<CategoryFormProps> = ({ initialValues }) => {
     setRank(value >= 1 ? value : 1);
   };
 
-  useLayoutEffect(() => {
+  useEffect(() => {
     if (initialValues) {
       setName(initialValues.name)
       setRank(initialValues.rank)

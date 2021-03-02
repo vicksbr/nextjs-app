@@ -18,10 +18,11 @@ export const CreatingWindow = Template.bind({});
 CreatingWindow.args = {
   window: {
     name: "World News",
-    date: new Date(),
-    type: "Flux",
+    last_update: new Date(),
+    type: "flux",
     id: "window1",
-    basePath: 'windows'
+    rank: [],
+    basePath: '/windows',
   },
   board: "board1",
 };
@@ -30,10 +31,11 @@ export const EditingWindow = Template.bind({});
 EditingWindow.args = {
   window: {
     name: "World News",
-    date: new Date(),
-    type: "Flux",
+    last_update: new Date(),
+    type: "flux",
     id: "window1",
-    basePath: 'windows'
+    rank: [],
+    basePath: '/windows',
   },
   board: "board1",
   snapshotDate: new Date(),

@@ -13,11 +13,13 @@ export default {
         name: "Business",
         date: new Date(),
         id: "category1",
+        rank: 1,
       },
       {
         name: "Finances",
         date: new Date(),
         id: "category2",
+        rank: 3,
       },
     ],
     layouts: [

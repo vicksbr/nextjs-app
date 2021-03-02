@@ -16,17 +16,17 @@ import {
 type LayoutFormProps = {
   initialValues?: {
     name?: string;
-    status?: boolean;
+    active?: boolean;
     thumbnail?: string;
-    rank?: string;
+    rank?: number;
   };
 };
 
 const emptyValues: LayoutFormProps["initialValues"] = {
   name: "",
-  status: false,
+  active: false,
   thumbnail: "",
-  rank: "",
+  rank: 1,
 };
 
 const getChangeEventValue = (
@@ -49,15 +49,13 @@ const LayoutForm: React.FC<LayoutFormProps> = ({
 
   useEffect(() => {
     if (initialValues) {
-      updateValue('name', initialValues.name)
-      updateValue('status', initialValues.status)
-      updateValue('rank', initialValues.rank)
+      setValues(initialValues)
     }
   }, [initialValues]);
 
   const changeHandlers = {
     name: (event: React.ChangeEvent<HTMLInputElement>) => updateValue("name", getChangeEventValue(event)),
-    status: () => updateValue("status", !values.status),
+    active: () => updateValue("active", values.active === true ? false : true),
     rank: (event: React.ChangeEvent<HTMLInputElement>) => updateValue("rank", getChangeEventValue(event)),
   };
 
@@ -83,8 +81,8 @@ const LayoutForm: React.FC<LayoutFormProps> = ({
             labelPlacement="start"
             control={
               <Switch
-                checked={values.status}
-                onChange={changeHandlers.status}
+                checked={values.active}
+                onChange={changeHandlers.active}
                 color="primary"
               />
             }

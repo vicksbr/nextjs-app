@@ -1,9 +1,18 @@
 import React from "react";
-import { capitalize } from "@material-ui/core";
 
 import type { Sort } from "types";
 
 import { SortBarContainer, SortItem, SortItems, SortLabel } from "./styles";
+
+type MapSortByToLabel = {
+  [k in Sort["sortBy"]]: string;
+}
+const mapSortByToLabel: MapSortByToLabel = {
+  name: "Name",
+  type: "Type",
+  rank: "Rank",
+  last_update: "Date",
+}
 
 type SortItemsListProps = {
   items: Sort["sortBy"][];
@@ -24,7 +33,7 @@ const SortItemsList: React.FC<SortItemsListProps> = ({
         selected={sort.sortBy === sortBy}
         order={sort.order as any}
       >
-        {capitalize(sortBy)}
+        {mapSortByToLabel[sortBy]}
       </SortItem>
     ))}
   </>
