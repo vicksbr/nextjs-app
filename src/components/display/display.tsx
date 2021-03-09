@@ -1,18 +1,39 @@
 import React from "react";
-import { useSelector } from "react-redux";
+import { connect } from "react-redux";
 
-import type { StoreState } from "../../store/reducers";
+import { Item } from "types";
 
+import CategoryForm from "./categoryForm";
+import TagForm from "./tagForm";
 import { DisplayContainer } from "./styles";
 
+const mapItemTypeToForm = (props: any) => ({
+  window: <CategoryForm {...props} />,
+  layout: <TagForm {...props} />,
+  category: <CategoryForm {...props} />,
+  tag: <TagForm {...props} />,
+});
+
 type DisplayProps = {
-  selectedItem: string | null;
+  selectedItem: Item;
 };
 const Display: React.FC<DisplayProps> = ({ selectedItem }) => {
-  const selectedView = useSelector<StoreState>((state) => state.display);
+  const formProps = selectedItem.data
+    ? { initialValues: selectedItem.data }
+    : null;
 
   return (
-    <DisplayContainer>{`${selectedView}: ${selectedItem}`}</DisplayContainer>
+    <DisplayContainer>
+      {mapItemTypeToForm(formProps)[selectedItem.type]}
+    </DisplayContainer>
   );
 };
-export default Display;
+
+type StateToProps = {
+  selectedItem: Item;
+};
+const mapStateToProps = ({ selectedItem }: StateToProps) => ({
+  selectedItem,
+});
+
+export default connect(mapStateToProps)(Display);

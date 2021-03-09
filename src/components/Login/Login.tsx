@@ -14,6 +14,7 @@ import TextLogo from "icons/textLogo";
 import Alert from "@material-ui/core/Alert";
 
 const LoginForm: React.FC<{
+  isLogin: boolean;
   errorMessage: string;
   onSubmit: (event: React.FormEvent<HTMLDivElement>) => void;
 }> = ({ errorMessage, onSubmit }) => (

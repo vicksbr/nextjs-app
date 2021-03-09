@@ -5,12 +5,14 @@ export const themeValues = {
     primary: {
       main: "#6b48ff",
       light: "#886bff",
+      dark: "#6141e9",
     },
     secondary: {
       main: "#0070f3",
     },
     error: {
       main: "#eb5757",
+      dark: "#e15353",
     },
     background: {
       default: "#fff",

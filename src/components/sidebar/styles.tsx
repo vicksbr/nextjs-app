@@ -11,6 +11,8 @@ import {
   Button,
   FormControlLabel,
   FormGroup,
+  FormControl,
+  ListItemIcon,
 } from "@material-ui/core";
 import AddIcon from "@material-ui/icons/Add";
 import { Search as MaterialSearchIcon } from "@material-ui/icons";
@@ -75,31 +77,35 @@ type SortItemProps = {
   order?: Sort["order"];
   theme: Theme;
 };
-const SortItem = styled(Typography)(({ theme, selected, order }: SortItemProps) => ({
-  color: selected ? theme.palette.grey.A700 : theme.palette.grey[500],
-  marginLeft: "36px",
-  paddingLeft: selected ? "17px" : 0,
-  position: "relative",
-  cursor: "pointer",
-  userSelect: "none",
-  "&:first-child": {
-    marginLeft: 0,
-  },
-  "&:before": {
-    content: "''",
-    display: selected ? "block" : "none",
-    width: 0,
-    height: 0,
-    border: "5px solid transparent",
-    borderTopColor: theme.palette.grey.A700,
-    borderBottomWidth: 0,
-    position: "absolute",
-    left: 0,
-    top: "50%",
-    transform:
-      order === "asc" ? "translateY(-50%) rotate(180deg)" : "translateY(-50%)",
-  },
-}));
+const SortItem = styled(Typography)(
+  ({ theme, selected, order }: SortItemProps) => ({
+    color: selected ? theme.palette.grey.A700 : theme.palette.grey[500],
+    marginLeft: "36px",
+    paddingLeft: selected ? "17px" : 0,
+    position: "relative",
+    cursor: "pointer",
+    userSelect: "none",
+    "&:first-child": {
+      marginLeft: 0,
+    },
+    "&:before": {
+      content: "''",
+      display: selected ? "block" : "none",
+      width: 0,
+      height: 0,
+      border: "5px solid transparent",
+      borderTopColor: theme.palette.grey.A700,
+      borderBottomWidth: 0,
+      position: "absolute",
+      left: 0,
+      top: "50%",
+      transform:
+        order === "asc"
+          ? "translateY(-50%) rotate(180deg)"
+          : "translateY(-50%)",
+    },
+  })
+);
 
 export { SortBarContainer, SortLabel, SortItems, SortItem };
 
@@ -136,6 +142,20 @@ const Item = styled(({ selected, ...other }) => <ListItem {...other} />)(
   { withTheme: true }
 );
 
+type ItemRankProps = {
+  selected?: boolean;
+  theme: Theme;
+};
+
+const StyledItemIcon = styled(ListItemIcon)({
+  minWidth: 36,
+});
+
+const ItemRank = styled(Typography)(({ theme, selected }: ItemRankProps) => ({
+  color: selected ? theme.palette.primary.main : theme.palette.grey[400],
+  marginRight: 4,
+}));
+
 const CreateButton = styled(Fab)({
   letterSpacing: "1.25px",
   padding: "0 17px 0 12px",
@@ -148,7 +168,7 @@ const CreateIcon = styled(AddIcon)({
   marginRight: "12px",
 });
 
-export { ScrollList, Item, CreateButton, CreateIcon };
+export { ScrollList, Item, StyledItemIcon, ItemRank, CreateButton, CreateIcon };
 // Filters
 const AnchorContainer = styled(Box)({
   position: "relative",
@@ -182,9 +202,19 @@ const InputsLabel = styled(Typography)(({ theme }) => ({
   marginBottom: "10px",
 }));
 
-const TypesGroup = styled(FormGroup)({
-  marginBottom: "24px",
+const LayoutField = styled(FormControl)({
+  width: 290,
+  display: "block",
+  marginBottom: 16,
 });
+
+const CategoriesField = styled(FormControl)({
+  width: 290,
+  display: "block",
+  marginBottom: 24,
+});
+
+const TypesGroup = styled(FormGroup)({});
 
 const TypeFilter = styled(FormControlLabel)(({ theme }) => ({
   color: theme.palette.grey[700],
@@ -194,7 +224,7 @@ const ButtonsContainer = styled(Box)({
   display: "flex",
   justifyContent: "flex-end",
   alignItems: "center",
-  marginTop: "34px",
+  marginTop: "17px",
 });
 
 const ApplyButton = styled(Button)({
@@ -212,6 +242,8 @@ export {
   TopBox,
   MainLabel,
   InputsLabel,
+  LayoutField,
+  CategoriesField,
   TypesGroup,
   TypeFilter,
   ButtonsContainer,

@@ -21,6 +21,7 @@ export const Default = Template.bind({});
 export const InitialValue = Template.bind({});
 InitialValue.args = {
   initialValues: {
-    name: "New Category Name"
-  }
+    name: "New Category Name",
+    rank: 2,
+  },
 };

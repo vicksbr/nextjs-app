@@ -1,32 +1,39 @@
-import React, { useState } from "react";
-import { FormControl, OutlinedInput } from "@material-ui/core";
+import React, { useState, useEffect } from "react";
+import { OutlinedInput } from "@material-ui/core";
 
+import { NameField } from "./style";
 import { FormTitle, FieldLabel } from "../styles";
 
 type TagFormProps = {
-  initialValues: {
+  initialValues?: {
     name: string;
   };
 };
 
 const TagForm: React.FC<TagFormProps> = ({ initialValues }) => {
-  const [nameValue, setNameValue] = useState(
-    initialValues ? initialValues.name : ""
-  );
+  const [nameValue, setNameValue] = useState("");
+
+  useEffect(() => {
+    if (initialValues) {
+      setNameValue(initialValues.name || "");
+    }
+  }, [initialValues]);
+
   const handleNameChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setNameValue(event.target.value);
   };
+
   return (
     <>
       <FormTitle>Tags</FormTitle>
-      <FormControl>
+      <NameField>
         <FieldLabel>Tag Name</FieldLabel>
         <OutlinedInput
           value={nameValue}
           onChange={handleNameChange}
           placeholder="Tag Name"
         />
-      </FormControl>
+      </NameField>
     </>
   );
 };

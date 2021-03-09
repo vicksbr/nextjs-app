@@ -1,8 +1,10 @@
 import React, { useState } from "react";
+import { connect, useDispatch } from "react-redux";
 import { capitalize, InputAdornment } from "@material-ui/core";
 import { useTheme } from "@material-ui/core/styles";
+import { useRouter } from "next/router";
 
-import type { View, CurationData, Sort, Category } from "types";
+import { createItem, applyFilters, updateSearchTerm } from "store/actions";
 
 import ItemsList from "./itemsList";
 import SortBar from "./sortBar";
@@ -15,64 +17,119 @@ import {
   SearchIcon,
 } from "./styles";
 
-type SidebarProps = {
-  data: CurationData;
-  selectedView: View | null;
-  selectedItem: string | null;
-  handleSelectItem: React.Dispatch<React.SetStateAction<string | null>>;
-};
-const Sidebar: React.FC<SidebarProps> = ({
-  data,
-  selectedView,
-  selectedItem,
-  handleSelectItem,
-}) => {
-  const theme = useTheme();
-  const [sort, setSort] = useState<Sort>({ sortBy: "date", order: "desc" });
+import type {
+  View,
+  Sort,
+  Item,
+  LayoutData,
+} from "types";
+import { useAllData } from "../../../lib/useAllData";
 
-  // Mocked functionality to be replaced with redux integration
-  const [filteredCategories, setFilteredCategories] = useState<
-    Category[] | undefined
-  >(undefined);
-  const [filteredTypes, setFilteredTypes] = useState(undefined);
-  const handleFiltersApply = (types: any, categories: any) => {
-    setFilteredTypes(types);
-    setFilteredCategories(categories);
+const compareItems = (sort: Sort) => {
+  return (itemA: any, itemB: any) => {
+    if (itemA[sort.sortBy] > itemB[sort.sortBy]) {
+      return sort.order === "asc" ? 1 : -1;
+    }
+    if (itemA[sort.sortBy] < itemB[sort.sortBy]) {
+      return sort.order === "asc" ? -1 : 1;
+    }
+    return 0;
+  };
+};
+
+const mapViewToSortItems = (
+  selectedView: View | null,
+  layoutFilter: LayoutData | null
+): Sort["sortBy"][] => {
+  switch (selectedView) {
+    case "windows":
+      return layoutFilter ? ["rank"] : ["last_update", "name", "type"];
+    case "layouts":
+      return ["rank", "name"];
+    case "categories":
+      return ["rank", "name"];
+    case "tags":
+      return ["last_update", "name"];
+    default:
+      return [];
+  }
+};
+
+type SidebarProps = {
+  searchTerm: string;
+  selectedItem: any;
+  layoutFilter: LayoutData | null;
+};
+const Sidebar: React.FC<SidebarProps> = ({ searchTerm, layoutFilter }) => {
+  const theme = useTheme();
+  const [sort, setSort] = useState<Sort>({
+    sortBy: "last_update",
+    order: "desc",
+  });
+  const router = useRouter();
+  const dispatch = useDispatch();
+  const { data } = useAllData();
+
+  const { id } = router.query;
+  const currentView = router.pathname.split("/")[1];
+  const currentItem = id ?? null;
+  const searchPlaceholder = currentView
+    ? `Search ${capitalize(currentView)}`
+    : "";
+  const items = currentView ? data[currentView as View] : [];
+  const sortedItems = items
+    ? [...items].sort(compareItems(sort))
+    : [];
+
+  const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    dispatch(updateSearchTerm(event.target.value));
   };
 
-  const searchPlaceholder = selectedView
-    ? `Search ${capitalize(selectedView)}`
-    : "";
+  const handleCreate = () => {
+    const basePath = router.pathname.split("/")[1];
+    dispatch(createItem());
+    router.push(`/${basePath}/?create=true`);
+  };
+
   return (
     <SidebarContainer disableGutters>
-      <SearchInput
-        disableUnderline
-        fullWidth
-        placeholder={searchPlaceholder}
-        startAdornment={
-          <InputAdornment position="start">
-            <SearchIcon htmlColor={theme.palette.grey[600]} />
-          </InputAdornment>
-        }
-        endAdornment={
-          <Filters
-            categories={data.categories}
-            onSave={handleFiltersApply}
-            filteredCategories={filteredCategories}
-            filteredTypes={filteredTypes}
-          />
-        }
-      />
-      <SortBar selectedView={selectedView} sort={sort} setSort={setSort} />
-      {selectedView && (
-        <ItemsList
-          items={data[selectedView]}
-          selectedItem={selectedItem}
-          handleSelectItem={handleSelectItem}
+      {items && (
+        <SearchInput
+          value={searchTerm}
+          onChange={handleSearchChange}
+          disableUnderline
+          fullWidth
+          placeholder={searchPlaceholder}
+          startAdornment={
+            <InputAdornment position="start">
+              <SearchIcon htmlColor={theme.palette.grey[600]} />
+            </InputAdornment>
+          }
+          endAdornment={
+            currentView === "windows" && (
+              <Filters
+                categories={data.categories}
+                layouts={data.layouts}
+                onSave={(filters) => dispatch(applyFilters(filters))}
+              />
+            )
+          }
         />
       )}
-      {selectedView && (
-        <CreateButton color="primary" variant="extended">
+      <SortBar
+        items={mapViewToSortItems(currentView as View, layoutFilter)}
+        sort={sort}
+        setSort={setSort}
+      />
+      {currentView && (
+        <ItemsList items={sortedItems} selectedItem={currentItem as string} />
+      )}
+      {currentView && (
+        <CreateButton
+          onClick={() => handleCreate()}
+          color="primary"
+          variant="extended"
+        >
           <CreateIcon />
           Create
         </CreateButton>
@@ -81,4 +138,25 @@ const Sidebar: React.FC<SidebarProps> = ({
   );
 };
 
-export default Sidebar;
+type StateToProps = {
+  selectedView: View | null;
+  selectedItem: Item;
+  searchTerm: string;
+  filters: {
+    layout: LayoutData | null;
+  };
+};
+
+const mapStateToProps = ({
+  selectedView,
+  selectedItem,
+  searchTerm,
+  filters: { layout },
+}: StateToProps) => ({
+  selectedView,
+  selectedItem,
+  searchTerm,
+  layoutFilter: layout,
+});
+
+export default connect(mapStateToProps)(Sidebar);

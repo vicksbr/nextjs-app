@@ -22,6 +22,7 @@ const FieldLabel = styled(FormLabel)(({ theme }) => ({
   lineHeight: "24px",
   fontWeight: 500,
   marginBottom: "12px",
+  display: "block",
 }));
 
 export { FormTitle, FieldLabel };

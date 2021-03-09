@@ -1,6 +1,5 @@
 import React from "react";
 import type { Story } from "@storybook/react";
-import { useArgs } from '@storybook/client-api';
 
 import MainMenu from "./mainMenu";
 
@@ -15,10 +14,7 @@ export default {
 type MainMenuProps = React.ComponentProps<typeof MainMenu>;
 
 const Template: Story<MainMenuProps> = (args) => {
-  const [, updateArgs] = useArgs();
-  return <MainMenu {...args} setSelectedView={(view) => updateArgs({
-    selectedView: view
-  })}/>;
+  return <MainMenu {...args} />;
 };
 
 export const Default = Template.bind({});

@@ -1,4 +1,5 @@
 import React, { useState, useRef } from "react";
+import { connect } from "react-redux";
 import {
   Popover,
   useTheme,
@@ -9,7 +10,7 @@ import {
   Fade,
 } from "@material-ui/core";
 
-import { WindowTypes, WindowType, Category } from "types";
+import { WindowType, CategoryData, LayoutData } from "types";
 
 import {
   AnchorContainer,
@@ -18,6 +19,8 @@ import {
   TopBox,
   MainLabel,
   InputsLabel,
+  LayoutField,
+  CategoriesField,
   TypesGroup,
   TypeFilter,
   FilterIcon,
@@ -26,52 +29,63 @@ import {
   ResetButton,
 } from "./styles";
 
-const windowTypes: WindowTypes = [
-  "Flux",
-  "Chart",
-  "Quotes Table",
-  "Twitter Search",
+const windowTypes: {value: WindowType, label: string}[] = [
+  {value: "flux", label: "Flux"},
+  {value: "chart", label: "Chart"},
+  {value: "quotestable", label: "Quotes Table"},
+  {value: "twittersearch", label: "Twitter Search"},
 ];
 
 type TypeBoolMap = { [k in WindowType]: boolean };
 
 const emptyTypesState: TypeBoolMap = windowTypes.reduce(
   (obj: TypeBoolMap, type) => {
-    obj[type] = false;
+    obj[type.value] = false;
     return obj;
   },
   {} as TypeBoolMap
 );
 
 type FiltersProps = {
-  categories: Category[];
+  categories: CategoryData[];
+  layouts: LayoutData[];
   filteredTypes?: { [x: string]: boolean };
-  filteredCategories?: Category[];
-  onSave: (types: { [x: string]: boolean }, categories: Category[]) => void;
+  filteredCategories?: CategoryData[];
+  filteredLayout?: LayoutData | null;
+  onSave: (filters: {
+    types: { [x: string]: boolean };
+    categories: CategoryData[];
+    layout: LayoutData | null;
+  }) => void;
 };
 const Filters: React.FC<FiltersProps> = ({
   categories,
-  onSave,
+  layouts,
   filteredTypes = null,
   filteredCategories = null,
+  filteredLayout = null,
+  onSave,
 }) => {
-  const initialTypesState = filteredTypes ? filteredTypes : emptyTypesState;
-  const initialCategoriesState = filteredCategories ? filteredCategories : [];
+  const initialTypesState = filteredTypes || emptyTypesState;
+  const initialCategoriesState = filteredCategories || [];
+  const initialLayoutState = filteredLayout ? filteredLayout : null;
   const [open, setOpen] = useState(false);
   const [selectedCategories, setSelectedCategory] = useState(
     initialCategoriesState
   );
   const [selectedTypes, setSelectedTypes] = useState(initialTypesState);
+  const [selectedLayout, setSelectedLayout] = useState(initialLayoutState);
 
   const anchor = useRef(null);
 
   const isFiltering = () => {
+    const isLayoutFiltered = !!filteredLayout;
     const isCategoriesFiltered =
       filteredCategories && filteredCategories.length > 0;
     const isTypesFiltered =
       filteredTypes &&
       Object.values(filteredTypes).some((typeSelected) => typeSelected);
-    if (isCategoriesFiltered || isTypesFiltered) {
+    if (isLayoutFiltered || isCategoriesFiltered || isTypesFiltered) {
       return true;
     }
     return false;
@@ -79,9 +93,16 @@ const Filters: React.FC<FiltersProps> = ({
 
   const handleCategoryChange = (
     _: React.SyntheticEvent<Element, Event>,
-    value: Category[]
+    value: CategoryData[]
   ) => {
     setSelectedCategory(value);
+  };
+
+  const handleLayoutChange = (
+    _: React.SyntheticEvent<Element, Event>,
+    value: LayoutData | null
+  ) => {
+    setSelectedLayout(value);
   };
 
   const handleCheckboxChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -95,6 +116,7 @@ const Filters: React.FC<FiltersProps> = ({
     setOpen(true);
     setSelectedTypes(initialTypesState);
     setSelectedCategory(initialCategoriesState);
+    setSelectedLayout(initialLayoutState);
   };
 
   const handleCloseFilters = () => {
@@ -102,12 +124,16 @@ const Filters: React.FC<FiltersProps> = ({
   };
 
   const handleSave = () => {
-    onSave(selectedTypes, selectedCategories);
+    onSave({
+      types: selectedTypes,
+      categories: selectedCategories,
+      layout: selectedLayout,
+    });
     handleCloseFilters();
   };
 
   const handleReset = () => {
-    onSave(emptyTypesState, []);
+    onSave({ types: emptyTypesState, categories: [], layout: null });
     handleCloseFilters();
   };
 
@@ -136,27 +162,25 @@ const Filters: React.FC<FiltersProps> = ({
             <FilterIcon color="primary" onClick={handleCloseFilters} />
             <MainLabel>Filter by:</MainLabel>
           </TopBox>
-          <FormControl component="fieldset">
-            <InputsLabel variant="subtitle2">Window Type</InputsLabel>
-            <TypesGroup>
-              {windowTypes.map((type) => (
-                <TypeFilter
-                  key={type}
-                  control={
-                    <Checkbox
-                      color="primary"
-                      checked={selectedTypes[type]}
-                      onChange={handleCheckboxChange}
-                      name={type}
-                    />
-                  }
-                  label={type}
+          <LayoutField variant="outlined">
+            <InputsLabel variant="subtitle2">Layout</InputsLabel>
+            <Autocomplete
+              options={layouts}
+              ChipProps={{ color: "primary" }}
+              getOptionLabel={(option) => option.name}
+              value={selectedLayout}
+              onChange={handleLayoutChange}
+              renderInput={(params) => (
+                <TextField
+                  {...params}
+                  variant="outlined"
+                  placeholder="Layout"
                 />
-              ))}
-            </TypesGroup>
-          </FormControl>
-          <InputsLabel variant="subtitle2">Categories</InputsLabel>
-          <FormControl variant="outlined">
+              )}
+            />
+          </LayoutField>
+          <CategoriesField variant="outlined">
+            <InputsLabel variant="subtitle2">Categories</InputsLabel>
             <Autocomplete
               multiple
               options={categories}
@@ -176,10 +200,28 @@ const Filters: React.FC<FiltersProps> = ({
                   {...params}
                   variant="outlined"
                   placeholder="Categories"
-                  style={{ width: "290px" }}
                 />
               )}
             />
+          </CategoriesField>
+          <FormControl component="fieldset">
+            <InputsLabel variant="subtitle2">Window Type</InputsLabel>
+            <TypesGroup>
+              {windowTypes.map((type) => (
+                <TypeFilter
+                  key={type.value}
+                  control={
+                    <Checkbox
+                      color="primary"
+                      checked={selectedTypes[type.value]}
+                      onChange={handleCheckboxChange}
+                      name={type.value}
+                    />
+                  }
+                  label={type.label}
+                />
+              ))}
+            </TypesGroup>
           </FormControl>
           <ButtonsContainer>
             <ResetButton onClick={handleReset}>reset</ResetButton>
@@ -191,4 +233,18 @@ const Filters: React.FC<FiltersProps> = ({
   );
 };
 
-export default Filters;
+type StateToProps = {
+  filters: {
+    types: TypeBoolMap;
+    categories: CategoryData[];
+    layout: LayoutData | null;
+  };
+};
+const mapStateToProps = ({
+  filters: { types, categories, layout },
+}: StateToProps) => ({
+  filteredTypes: types,
+  filteredCategories: categories,
+  filteredLayout: layout,
+});
+export default connect(mapStateToProps)(Filters);
