@@ -1,12 +1,11 @@
-import { themeValues } from "../src/theme";
 import { MuiThemeProvider, createMuiTheme } from "@material-ui/core/styles";
-import Provider from "./Provider";
 import CssBaseline from "@material-ui/core/CssBaseline";
-import reducer, { initialState } from "../src/store/reducers";
-
-
-import { Provider as ReduxProvider } from "react-redux";
 import { createStore, applyMiddleware, compose } from "redux";
+import { Provider as ReduxProvider } from "react-redux";
+
+import Provider from "./Provider";
+import { themeValues } from "../src/theme";
+import reducer, { initialState } from "../src/store/reducers";
 
 const storyTheme = createMuiTheme({
   ...themeValues,
