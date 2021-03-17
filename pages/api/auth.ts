@@ -1,7 +1,7 @@
 import withSession from "../../lib/session";
 
 const auth = async (user: string, password: string) =>
-  await fetch("http://localhost:3000/api/login", {
+  await fetch("/api/login", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({
