@@ -11,8 +11,7 @@ import DeleteIcon from "@material-ui/icons/Delete";
 
 export const GridContainer = styled(Box)({
   display: "grid",
-  gridTemplateColumns: "1fr 1fr",
-  gridTemplateRows: "200px 200px 200px 1fr",
+  gridTemplateColumns: "calc(52% - 12.5px) calc(48% - 12.5px)",
   gap: "25px",
   gridTemplateAreas: `
   'search snapshot'
@@ -20,7 +19,19 @@ export const GridContainer = styled(Box)({
   'tags categories'
   'onboarding status'
   `,
-  maxWidth: "1024px",
+  paddingBottom: 140,
+});
+
+export const WindowSearchField = styled(FormControl)({
+  gridArea: "search",
+});
+
+export const SnapshotField = styled(FormControl)({
+  gridArea: "snapshot",
+});
+
+export const ThumbnailField = styled(FormControl)({
+  gridArea: "thumbnail",
 });
 
 export const TrashIcon = styled(DeleteIcon)(({ theme }) => ({

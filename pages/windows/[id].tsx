@@ -1,23 +1,35 @@
-import { useRouter } from "next/router";
 import React from "react";
+import useSWR from "swr";
+import { useRouter } from "next/router";
+
+import WindowForm from "components/display/windowForm";
+
+import { FullWindowData } from "types";
 
 import useUser from "../../lib/useUser";
-import { getWindowsItemById } from "store/selectors";
+import { useAllData } from "../../lib/useAllData";
 
-
-const WindowsPage: React.FC = () => {
+const WindowsDynamic: React.FC = () => {
+  const router = useRouter();
   const { user } = useUser({ redirectTo: "/login" });
-  const router = useRouter()
-  const item = getWindowsItemById(router.query.id as string)
 
-  if (!user?.isLoggedIn) return <>Loading</>
+  const {
+    data: { layouts, categories, tags },
+  } = useAllData();
+
+  const itemId = router.query.id;
+  const { data: item } = useSWR(`/api/curated/windows/${itemId}`);
+
+  if (!user?.isLoggedIn || !item) return <>Loading</>;
 
   return (
-    <>
-      <p>Window Page {router.query.id}</p>
-      <pre>{JSON.stringify(item, null, 2)}</pre>
-    </>
-  )
-}
+    <WindowForm
+      availableCategories={categories}
+      availableLayouts={layouts}
+      availableTags={tags}
+      initialValues={item as FullWindowData}
+    />
+  );
+};
 
-export default WindowsPage;
+export default WindowsDynamic;

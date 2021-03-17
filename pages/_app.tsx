@@ -7,17 +7,18 @@ import { AppProps } from "next/app";
 import { ThemeProvider } from "@material-ui/core/styles";
 import { CacheProvider } from "@emotion/react";
 
-import Layout from "components/Layout"
+import Layout from "components/Layout";
 
 import fetch from "../lib/fetchJson";
 import theme from "../src/theme";
 import { wrapper } from "../src/store/store";
 import { useRouter } from "next/router";
+import useUser from "../lib/useUser";
 
 export const cache = createCache({ key: "css", prepend: true });
 
 export const WrappedApp = ({ Component, pageProps }: AppProps) => {
-  const router = useRouter()
+  const router = useRouter();
 
   React.useEffect(() => {
     // Remove the server-side injected CSS.
@@ -27,6 +28,10 @@ export const WrappedApp = ({ Component, pageProps }: AppProps) => {
     }
   }, []);
 
+  const { user } = useUser({ redirectTo: "/login" });
+
+  if (!user?.isLoggedIn && router.route !== "/login") return <></>;
+
   return (
     <CacheProvider value={cache}>
       <Head>
@@ -35,13 +40,21 @@ export const WrappedApp = ({ Component, pageProps }: AppProps) => {
       </Head>
       <ThemeProvider theme={theme}>
         <CssBaseline />
-        <SWRConfig value={{ fetcher: fetch, onError: (err) => { console.error(err); } }}>
-          {router.route === '/login' ?
-            <Component {...pageProps} /> :
+        <SWRConfig
+          value={{
+            fetcher: fetch,
+            onError: (err) => {
+              console.error(err);
+            },
+          }}
+        >
+          {router.route === "/login" ? (
+            <Component {...pageProps} />
+          ) : (
             <Layout>
               <Component {...pageProps} />
             </Layout>
-          }
+          )}
         </SWRConfig>
       </ThemeProvider>
     </CacheProvider>
@@ -49,4 +62,3 @@ export const WrappedApp = ({ Component, pageProps }: AppProps) => {
 };
 
 export default wrapper.withRedux(WrappedApp);
-

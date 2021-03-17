@@ -1,30 +1,19 @@
 import { CurationData, FullWindowData } from "types";
-import { randomDate } from "utils/date";
 
 export const itemsData: CurationData = {
   windows: [
     {
       name: "World News",
-      last_update: randomDate(new Date(2018,1,1), new Date()),
+      last_update: new Date(2018, 1, 2).getTime(),
       type: "flux",
       id: "window1",
-      basePath: '/windows',
-      rank: [],
-    },
-    {
-      name: "US Financial Blogs",
-      last_update: randomDate(new Date(2018,1,1), new Date()),
-      type: "flux",
-      id: "window2",
-      basePath: '/windows',
       rank: [],
     },
     {
       name: "Graphic Design",
-      last_update: randomDate(new Date(2018,1,1), new Date()),
+      last_update: new Date(2018, 1, 3).getTime(),
       type: "flux",
       id: "window3",
-      basePath: '/windows',
       rank: [
         {
           layout_id: "layout1",
@@ -33,11 +22,17 @@ export const itemsData: CurationData = {
       ],
     },
     {
+      name: "US Financial Blogs",
+      last_update: new Date(2019, 3, 1).getTime(),
+      type: "flux",
+      id: "window2",
+      rank: [],
+    },
+    {
       name: "Currencies",
-      last_update: randomDate(new Date(2018,1,1), new Date()),
+      last_update: new Date(2019, 1, 10).getTime(),
       type: "quotestable",
       id: "window4",
-      basePath: '/windows',
       rank: [
         {
           layout_id: "layout1",
@@ -47,157 +42,138 @@ export const itemsData: CurationData = {
     },
     {
       name: "Ibovespa",
-      last_update: randomDate(new Date(2018,1,1), new Date()),
+      last_update: new Date(2019, 1, 1).getTime(),
       type: "quotestable",
       id: "window5",
-      basePath: '/windows',
       rank: [],
     },
     {
       name: "Game News and Entertainment",
-      last_update: randomDate(new Date(2018,1,1), new Date()),
+      last_update: new Date(2018, 1, 1).getTime(),
       type: "flux",
       id: "window6",
-      basePath: '/windows',
       rank: [],
     },
     {
       name: "USD BRL",
-      last_update: randomDate(new Date(2018,1,1), new Date()),
+      last_update: new Date(2018, 1, 1).getTime(),
       type: "chart",
       id: "window7",
-      basePath: '/windows',
       rank: [],
     },
     {
       name: "US Federal Reserve",
-      last_update: randomDate(new Date(2018,1,1), new Date()),
+      last_update: new Date(2019, 4, 5).getTime(),
       type: "chart",
       id: "window8",
-      basePath: '/windows',
       rank: [],
     },
     {
       name: "Agro Commodities BR",
-      last_update: randomDate(new Date(2018,1,1), new Date()),
+      last_update: new Date(2018, 5, 4).getTime(),
       type: "flux",
       id: "window9",
-      basePath: '/windows',
       rank: [],
     },
     {
       name: "Petrobras",
-      last_update: randomDate(new Date(2018,1,1), new Date()),
+      last_update: new Date(2018, 8, 18).getTime(),
       type: "twittersearch",
       id: "window10",
-      basePath: '/windows',
       rank: [],
-    }, 
+    },
   ],
   layouts: [
     {
       name: "US Markets",
-      last_update: randomDate(new Date(2018,1,1), new Date()),
+      last_update: new Date(2020, 1, 1).getTime(),
       id: "layout1",
       rank: 1,
       thumbnail:
         "https://i.picsum.photos/id/38/460/460.jpg?hmac=xmyt6kZw_mADqCdDa7ab4-FAFQHpGnYjKkiNELPVVpQ",
       active: true,
-      basePath:' /layouts',
     },
     {
       name: "Gamer Girl Board",
-      last_update: randomDate(new Date(2018,1,1), new Date()),
+      last_update: new Date(2021, 1, 1).getTime(),
       id: "layout2",
       rank: 2,
       thumbnail:
         "https://i.picsum.photos/id/38/460/460.jpg?hmac=xmyt6kZw_mADqCdDa7ab4-FAFQHpGnYjKkiNELPVVpQ",
       active: false,
-      basePath:' /layouts',
     },
     {
       name: "Food",
-      last_update: randomDate(new Date(2018,1,1), new Date()),
+      last_update: new Date(2018, 5, 5).getTime(),
       id: "layout3",
       rank: 3,
       thumbnail:
         "https://i.picsum.photos/id/38/460/460.jpg?hmac=xmyt6kZw_mADqCdDa7ab4-FAFQHpGnYjKkiNELPVVpQ",
       active: true,
-      basePath:' /layouts',
     },
     {
       name: "Lifestyle",
-      last_update: randomDate(new Date(2018,1,1), new Date()),
+      last_update: new Date(2018, 3, 3).getTime(),
       id: "layout4",
       rank: 4,
       thumbnail:
         "https://i.picsum.photos/id/38/460/460.jpg?hmac=xmyt6kZw_mADqCdDa7ab4-FAFQHpGnYjKkiNELPVVpQ",
       active: true,
-      basePath:' /layouts',
     },
     {
       name: "Mercado Financeiro BR",
-      last_update: randomDate(new Date(2018,1,1), new Date()),
+      last_update: new Date(2018, 2, 2).getTime(),
       id: "layout5",
       rank: 5,
       thumbnail:
         "https://i.picsum.photos/id/38/460/460.jpg?hmac=xmyt6kZw_mADqCdDa7ab4-FAFQHpGnYjKkiNELPVVpQ",
       active: true,
-      basePath:' /layouts',
     },
   ],
   categories: [
     {
       name: "Business",
-      last_update: randomDate(new Date(2018,1,1), new Date()),
+      last_update: new Date(2019, 7, 7).getTime(),
       id: "category1",
       rank: 1,
-      basePath: '/categories'
     },
     {
       name: "Finances",
-      last_update: randomDate(new Date(2018,1,1), new Date()),
+      last_update: new Date(2020, 7, 7).getTime(),
       id: "category2",
       rank: 3,
-      basePath: '/categories'
     },
   ],
   tags: [
     {
       name: "Bitcoin",
-      last_update: randomDate(new Date(2018,1,1), new Date()),
+      last_update: new Date(2019, 8, 8).getTime(),
       id: "tag1",
-      basePath: "/tags"
     },
     {
       name: "Blockchain",
-      last_update: randomDate(new Date(2018,1,1), new Date()),
+      last_update: new Date(2020, 9, 9).getTime(),
       id: "tag2",
-      basePath: "/tags"
     },
     {
       name: "Cryptocoin",
-      last_update: new Date("December 17, 1995 03:24:00"),
+      last_update: new Date("December 17, 1995 03:24:00").getTime(),
       id: "tag3",
-      basePath: "/tags"
     },
     {
       name: "Business",
-      last_update: randomDate(new Date(2018,1,1), new Date()),
+      last_update: new Date(2020, 8, 1).getTime(),
       id: "tag4",
-      basePath: "/tags"
     },
     {
       name: "Entrepreneurship",
-      last_update: randomDate(new Date(2018,1,1), new Date()),
+      last_update: new Date(2020, 8, 2).getTime(),
       id: "tag5",
-      basePath: "/tags"
     },
     {
       name: "Finances",
-      last_update: randomDate(new Date(2018,1,1), new Date()),
+      last_update: new Date(2020, 8, 3).getTime(),
       id: "tag6",
-      basePath: "/tags"
     },
   ],
 };
@@ -205,104 +181,106 @@ export const itemsData: CurationData = {
 export const fullWindowsData: FullWindowData[] = [
   {
     name: "World News",
-    last_update: randomDate(new Date(2018,1,1), new Date()),
+    last_update: new Date(2019, 5, 11).getTime(),
     type: "flux",
     id: "window1",
     description: "The hottest gaming news",
     tags: [
       {
-        name: "gaming",
-        id: "09178ca9-3161-4813-b2c9-3c9803100ec7",
+        name: "Bitcoin",
+        id: "tag1",
       },
       {
-        name: "news",
-        id: "8756eb63-a63f-4ce5-8581-ff8859c8a894",
+        name: "Business",
+        id: "tag4",
       },
     ],
     category: {
-      name: "gaming",
-      id: "dee92648-bf74-49e0-8322-b5ba4e3159cb",
+      name: "Business",
+      id: "category1",
     },
     layouts: [
       {
-        id: "bd4e4f66-2ae7-4447-8605-69247b0a92b5",
-        name: "Business",
+        id: "layout2",
+        name: "Gamer Girl Board",
         rank: 2,
       },
       {
-        id: "66c86fe3-3d1e-48c3-aab9-86ddf8505368",
-        name: "Finances",
+        id: "layout3",
+        name: "Food",
         rank: 8,
       },
     ],
     thumbnail:
       "https://i.picsum.photos/id/38/460/460.jpg?hmac=xmyt6kZw_mADqCdDa7ab4-FAFQHpGnYjKkiNELPVVpQ",
     active: true,
-    featured: false,
+    featured: true,
     created_from: {
+      snapshot_date: new Date(2019, 6, 11).getTime(),
       username: "fred",
       board: "2d52b358-dab4-4665-b734-e9f4a40a56a0",
-      window: "1d52b358-dab4-4665-b734-e9f4a40a56a0",
+      window: "2d52b358-dab4-4665-b734-e9f4a40a56a1",
     },
   },
   {
     name: "USD BRL",
-    last_update: randomDate(new Date(2018,1,1), new Date()),
+    last_update: new Date(2019, 10, 10).getTime(),
     type: "chart",
     id: "window2",
     description: "USD BRL chart",
     tags: [
       {
-        name: "news",
-        id: "8756eb63-a63f-4ce5-8581-ff8859c8a894",
+        name: "Cryptocoin",
+        id: "tag3",
       },
     ],
     category: {
-      name: "oi maldade",
-      id: "9c1bc992-dc9f-4adf-b7c6-780c380e7ef9",
+      name: "Finances",
+      id: "category2",
     },
     layouts: [
       {
-        id: "66c86fe3-3d1e-48c3-aab9-86ddf8505368",
-        name: "Finances",
+        id: "layout5",
+        name: "Mercado Financeiro BR",
         rank: 2,
       },
     ],
     thumbnail:
       "https://i.picsum.photos/id/38/460/460.jpg?hmac=xmyt6kZw_mADqCdDa7ab4-FAFQHpGnYjKkiNELPVVpQ",
-    active: true,
+    active: false,
     featured: false,
     created_from: {
+      snapshot_date: new Date(2019, 10, 12).getTime(),
       username: "fred",
-      board: "2d52b358-dab4-4665-b734-e9f4a40a56a0",
-      window: "1d52b358-dab4-4665-b734-e9f4a40a56a0",
+      board: "2d52b358-dab4-4665-b734-e9f4a40a56a3",
+      window: "2d52b358-dab4-4665-b734-e9f4a40a56a4",
     },
   },
   {
     name: "Ibovespa",
-    last_update: randomDate(new Date(2018,1,1), new Date()),
+    last_update: new Date(2019, 11, 11).getTime(),
     type: "quotestable",
     id: "window3",
     description: "Ibovespa quotes table",
     tags: [
       {
-        name: "news",
-        id: "8756eb63-a63f-4ce5-8581-ff8859c8a894",
+        name: "Entrepreneurship",
+        id: "tag5",
       },
     ],
     category: {
-      name: "oi maldade",
-      id: "9c1bc992-dc9f-4adf-b7c6-780c380e7ef9",
+      name: "Business",
+      id: "category1",
     },
     layouts: [
       {
-        id: "bd4e4f66-2ae7-4447-8605-69247b0a92b5",
-        name: "Business",
+        id: "layout4",
+        name: "Lifestyle",
         rank: 6,
       },
       {
-        id: "66c86fe3-3d1e-48c3-aab9-86ddf8505368",
-        name: "Finances",
+        id: "layout3",
+        name: "Food",
         rank: 3,
       },
     ],
@@ -311,82 +289,84 @@ export const fullWindowsData: FullWindowData[] = [
     active: true,
     featured: false,
     created_from: {
+      snapshot_date: new Date(2019, 11, 10).getTime(),
       username: "fred",
       board: "2d52b358-dab4-4665-b734-e9f4a40a56a0",
-      window: "1d52b358-dab4-4665-b734-e9f4a40a56a0",
+      window: "2d52b358-dab4-4665-b734-e9f4a40a56a2",
     },
   },
   {
     name: "Agro Comodities BR",
-    last_update: randomDate(new Date(2018,1,1), new Date()),
+    last_update: new Date(2019, 12, 12).getTime(),
     type: "flux",
     id: "window4",
     description: "Brazil's agro comodities",
     tags: [
       {
-        name: "gaming",
-        id: "09178ca9-3161-4813-b2c9-3c9803100ec7",
+        name: "Bitcoin",
+        id: "tag1",
       },
       {
-        name: "news",
-        id: "8756eb63-a63f-4ce5-8581-ff8859c8a894",
+        name: "Finances",
+        id: "tag6",
       },
     ],
     category: {
-      name: "gaming",
-      id: "dee92648-bf74-49e0-8322-b5ba4e3159cb",
+      name: "Business",
+      id: "category1",
     },
     layouts: [
       {
-        id: "bd4e4f66-2ae7-4447-8605-69247b0a92b5",
-        name: "Business",
+        id: "layout4",
+        name: "Lifestyle",
         rank: 5,
       },
       {
-        id: "66c86fe3-3d1e-48c3-aab9-86ddf8505368",
-        name: "Finances",
+        id: "layout1",
+        name: "US Markets",
         rank: 5,
       },
     ],
     thumbnail:
-      "https://i.picsum.photos/id/38/460/460.jpg?hmac=xmyt6kZw_mADqCdDa7ab4-FAFQHpGnYjKkiNELPVVpQ",
-    active: true,
-    featured: false,
+      "https://i.picsum.photos/id/1025/460/460.jpg?hmac=RERfmyH5tq5XrmTueDasXSsI_fVBFRSJSNRLz-ASvhk",
+    active: false,
+    featured: true,
     created_from: {
+      snapshot_date: new Date(2018, 12, 12).getTime(),
       username: "fred",
-      board: "2d52b358-dab4-4665-b734-e9f4a40a56a0",
-      window: "1d52b358-dab4-4665-b734-e9f4a40a56a0",
+      board: "2d52b358-dab4-4665-b734-e9f4a40a56a3",
+      window: "2d52b358-dab4-4665-b734-e9f4a40a56a5",
     },
   },
   {
     name: "Petrobras",
-    last_update: randomDate(new Date(2018,1,1), new Date()),
+    last_update: new Date(2018, 10, 10).getTime(),
     type: "twittersearch",
     id: "window5",
     description: "The hottest gaming news",
     tags: [
       {
-        name: "gaming",
-        id: "09178ca9-3161-4813-b2c9-3c9803100ec7",
+        name: "Cryptocoin",
+        id: "tag3",
       },
       {
-        name: "news",
-        id: "8756eb63-a63f-4ce5-8581-ff8859c8a894",
+        name: "Business",
+        id: "tag4",
       },
     ],
     category: {
-      name: "gaming",
-      id: "dee92648-bf74-49e0-8322-b5ba4e3159cb",
+      name: "Business",
+      id: "category1",
     },
     layouts: [
       {
-        id: "bd4e4f66-2ae7-4447-8605-69247b0a92b5",
-        name: "Business",
-        rank: 2,
+        id: "layout1",
+        name: "US Markets",
+        rank: 9,
       },
       {
-        id: "66c86fe3-3d1e-48c3-aab9-86ddf8505368",
-        name: "Finances",
+        id: "layout2",
+        name: "Gamer Girl Board",
         rank: 8,
       },
     ],
@@ -395,9 +375,10 @@ export const fullWindowsData: FullWindowData[] = [
     active: true,
     featured: false,
     created_from: {
-      username: "fred",
-      board: "2d52b358-dab4-4665-b734-e9f4a40a56a0",
-      window: "1d52b358-dab4-4665-b734-e9f4a40a56a0",
+      snapshot_date: new Date(2018, 11, 12).getTime(),
+      username: "fred22",
+      board: "2d52b358-dab4-4665-b734-e9f4a40a56a3",
+      window: "unexisting-window",
     },
   },
 ];

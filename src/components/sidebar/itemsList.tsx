@@ -6,8 +6,6 @@ import { WindowType, ItemData, WindowData } from "types";
 
 import { ScrollList, StyledItemIcon, Item, ItemRank } from "./styles";
 import { useRouter } from "next/router";
-import { selectItem } from "store/actions";
-import { useDispatch } from "react-redux";
 
 type ItemIconProps = {
   type: WindowType;
@@ -31,29 +29,27 @@ const ItemIcon: React.FC<ItemIconProps> = ({ type, selected }) => {
 type ItemsListProps = {
   items: ItemData[];
   selectedItem: string | null;
-  selectedView: string | null;
 };
 const ItemsList: React.FC<ItemsListProps> = ({
   items,
   selectedItem,
 }) => {
 
-  const router = useRouter()
-  const dispatch = useDispatch()
+  const router = useRouter();
 
-  const handleClick = (id: string, basePath: string) => {
-    dispatch(selectItem(id));
+  const handleClick = (id: string) => {
+    const basePath = `/${router.route.split('/').filter(piece => piece)[0]}`
     router.push(`${basePath}/${id}`);
   }
 
   return (
     <ScrollList>
       {items.map(
-        ({ name, type, id, rank, basePath }: Omit<ItemData, "type" | "rank"> & { type?: WindowType; rank?: number | WindowData["rank"] }) => {
+        ({ name, type, id, rank }: Omit<ItemData, "type" | "rank"> & { type?: WindowType; rank?: number | WindowData["rank"] }) => {
           return (
             <Item
               button
-              onClick={() => handleClick(id, basePath)}
+              onClick={() => handleClick(id)}
               selected={selectedItem === id}
               key={id}
             >

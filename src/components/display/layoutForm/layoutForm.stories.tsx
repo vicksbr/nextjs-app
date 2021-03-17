@@ -22,5 +22,7 @@ InitialValues.args = {
     active: true,
     thumbnail: "https://i.picsum.photos/id/576/460/460.jpg?hmac=8thC52hIjsYc7aQZPim5ST-zfvb5pdEtkFn16hp3vqo",
     rank: 2,
+    last_update: new Date().getTime(),
+    id: 'layout1-example-id',
   },
 };

@@ -1,61 +1,104 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
+import { mutate } from "swr";
+import { useRouter } from "next/router";
 import { FormControl, OutlinedInput } from "@material-ui/core";
 
+import type { CategoryData } from "types";
+
+import Form from "../Form/Form";
+import useForm from "../../../../lib/useForm";
+import fetchJson from "../../../../lib/fetchJson";
 import { FormGrid } from "./styles";
 import { FormTitle, FieldLabel } from "../styles";
+import { useAllData } from "../../../../lib/useAllData";
 
 type CategoryFormProps = {
-  initialValues?: {
-    name: string;
-    rank: number;
-  };
+  action: "create" | "update";
+  initialValues?: CategoryData;
 };
-const CategoryForm: React.FC<CategoryFormProps> = ({ initialValues }) => {
-  const [name, setName] = useState(initialValues?.name ?? "");
-  const [rank, setRank] = useState(initialValues?.rank ?? 1)
+const CategoryForm: React.FC<CategoryFormProps> = ({
+  initialValues,
+  action,
+}) => {
+  const router = useRouter();
+  const { handleSubmit, register } = useForm();
+  const {
+    mutate: { categoriesMutate },
+  } = useAllData({ filtered: true });
 
+  const handleUpdate = async (formValues: any) => {
+    const id = initialValues?.id;
+    const newValues = {
+      name: formValues.name,
+      rank: formValues.rank,
+    };
 
-  const handleNameChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setName(event.target.value);
-  };
-  const handleRankChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const value = parseInt(event.target.value);
-    setRank(value >= 1 ? value : 1);
-  };
-
-  useEffect(() => {
-    if (initialValues) {
-      setName(initialValues.name)
-      setRank(initialValues.rank)
+    if (action === "update") {
+      await fetchJson(`/api/categories/${id}`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(newValues),
+      });
     }
-  }, [initialValues]);
+
+    if (action === "create") {
+      const response = await fetchJson(`/api/categories`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(newValues),
+      });
+
+      router.push(`/categories/${response.id}`, undefined, { shallow: true });
+    }
+
+    mutate("/api/categories");
+    categoriesMutate();
+  };
+
+  const handleDelete = async () => {
+    const id = initialValues?.id;
+    await fetchJson(`/api/categories/${id}`, {
+      method: "DELETE",
+      headers: { "Content-Type": "application/json" },
+    });
+
+    mutate("/api/categories");
+    categoriesMutate();
+  };
 
   return (
-    <>
+    <Form
+      onSubmit={(e) => handleSubmit(e, handleUpdate)}
+      onDelete={handleDelete}
+      itemName={initialValues?.name}
+      lastModified={initialValues?.last_update}
+    >
       <FormTitle>Categories</FormTitle>
       <FormGrid>
         <FormControl>
           <FieldLabel>Category Name</FieldLabel>
           <OutlinedInput
-            value={name}
-            onChange={handleNameChange}
+            name="name"
             placeholder="Category Name"
+            inputRef={register}
+            defaultValue={initialValues?.name}
+            key={initialValues?.name}
           />
         </FormControl>
         <FormControl>
           <FieldLabel>Rank</FieldLabel>
           <OutlinedInput
-            value={rank}
-            onChange={handleRankChange}
+            inputRef={register}
+            name="rank"
             type="number"
             placeholder="Rank"
-            inputProps={{
-              min: 1,
-            }}
+            inputProps={{ min: 1 }}
+            key={initialValues?.rank}
+            defaultValue={initialValues?.rank ?? 1}
           ></OutlinedInput>
         </FormControl>
       </FormGrid>
-    </>
+    </Form>
   );
 };
 

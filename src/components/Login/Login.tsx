@@ -37,6 +37,7 @@ const LoginForm: React.FC<{
           label="Password"
           name="password"
           variant="outlined"
+          InputProps={{ type: "password" }}
         />
         <StyledButton type="submit" variant="contained">
           Login

@@ -1,6 +1,7 @@
 export type WindowTypes = ["flux", "chart", "quotestable", "twittersearch"];
 export type WindowType = "flux" | "chart" | "quotestable" | "twittersearch";
 
+export type Views = ["windows", "layouts", "categories", "tags"];
 export type View = "windows" | "layouts" | "categories" | "tags";
 
 type Window = {
@@ -31,10 +32,9 @@ export type Sort = {
 
 export type WindowData = {
   name: string;
-  last_update: Date;
+  last_update: number;
   type: WindowType;
   id: string;
-  basePath: string;
   rank: {
     layout_id: LayoutData["id"];
     value: LayoutData["rank"];
@@ -42,14 +42,34 @@ export type WindowData = {
 };
 
 export type BaseWindow = {
+  name: string;
+  id: string;
+  window_type: WindowType;
+}
+
+export type Board = {
+  name: string;
+  id: string;
+  windows: BaseWindow[];
+}
+
+export type SnapshotInfo = {
+  username: string;
+  board: Board;
+  window: BaseWindow;
+  date?: number;
+}
+
+export type CreatedFrom = {
   username: string;
   board: string;
   window: string;
+  snapshot_date: number;
 }
 
 export type FullWindowData = {
   name: string;
-  last_update: Date;
+  last_update: number;
   description: string;
   thumbnail: string;
   tags: {
@@ -69,14 +89,13 @@ export type FullWindowData = {
   active: boolean;
   featured: boolean;
   id: string;
-  created_from: BaseWindow;
+  created_from: CreatedFrom;
 }
 
 export type LayoutData = {
   name: string;
-  last_update: Date;
+  last_update: number;
   id: string;
-  basePath: string;
   rank: number;
   thumbnail: string;
   active: boolean;
@@ -84,17 +103,15 @@ export type LayoutData = {
 
 export type CategoryData = {
   name: string;
-  last_update: Date;
+  last_update: number;
   id: string;
-  basePath: string;
   rank: number;
 };
 
 export type TagData = {
   name: string;
-  last_update: Date;
+  last_update: number;
   id: string;
-  basePath: string;
 };
 
 export type ItemData = WindowData | LayoutData | CategoryData | TagData;

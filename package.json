@@ -8,7 +8,8 @@
     "start": "next start",
     "storybook": "start-storybook -p 6006 -c ./.storybook -s .storybook/public",
     "build-storybook": "build-storybook",
-    "compile": "tsc --watch"
+    "compile": "tsc --watch",
+    "dev:inspect": "NODE_OPTIONS='--inspect' next dev"
   },
   "dependencies": {
     "@emotion/cache": "latest",
@@ -17,10 +18,8 @@
     "@emotion/styled": "^11.0.0",
     "@material-ui/core": "^5.0.0-alpha.24",
     "@material-ui/icons": "^4.11.2",
-    "@types/lowdb": "^1.0.9",
-    "lowdb": "^1.0.0",
-    "msw": "^0.26.2",
-    "msw-storybook-addon": "^1.1.0",
+    "@types/cors": "^2.8.10",
+    "cors": "^2.8.5",
     "next": "10.0.5",
     "next-iron-session": "^4.1.10",
     "next-redux-wrapper": "^6.0.2",
@@ -32,7 +31,7 @@
     "react-redux": "^7.2.2",
     "redux": "^4.0.5",
     "redux-promise-middleware": "^6.1.2",
-    "swr": "^0.4.1"
+    "swr": "0.5.3"
   },
   "devDependencies": {
     "@babel/core": "^7.12.13",

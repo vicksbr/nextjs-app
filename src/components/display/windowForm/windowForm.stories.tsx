@@ -25,7 +25,7 @@ export const InitialValue = Template.bind({});
 InitialValue.args = {
   initialValues: {
     name: "string",
-    last_update: new Date(),
+    last_update: new Date().getTime(),
     description: "",
     thumbnail: "string",
     tags: [itemsData.tags[0], itemsData.tags[1]],
@@ -42,6 +42,7 @@ InitialValue.args = {
       username: "string",
       board: "string",
       window: "string",
+      snapshot_date: new Date().getTime(),
     },
   },
 };

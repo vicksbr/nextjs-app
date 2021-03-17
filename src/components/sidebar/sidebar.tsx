@@ -1,17 +1,54 @@
-import React, { useState } from "react";
-import { connect, useDispatch, useSelector } from "react-redux";
+import React, { useState, useEffect } from "react";
+import { connect, useDispatch } from "react-redux";
 import { capitalize, InputAdornment } from "@material-ui/core";
 import { useTheme } from "@material-ui/core/styles";
 import { useRouter } from "next/router";
 
-import { createItem, applyFilters, updateSearchTerm } from "store/actions";
+import { applyFilters, updateSearchTerm } from "store/actions";
 
 import ItemsList from "./itemsList";
 import SortBar from "./sortBar";
 import Filters from "./filters";
-import { SidebarContainer, SearchInput, CreateButton, CreateIcon, SearchIcon } from "./styles";
+import {
+  SidebarContainer,
+  SearchInput,
+  CreateButton,
+  CreateIcon,
+  SearchIcon,
+} from "./styles";
 
-import type { View, CurationData, Sort, Item, LayoutData } from "types";
+import type { View, Sort, LayoutData } from "types";
+import { useAllData } from "../../../lib/useAllData";
+
+const initialSortValues = (currentView: View | null): Sort => {
+  switch (currentView) {
+    case "windows":
+      return {
+        sortBy: "last_update",
+        order: "desc",
+      };
+    case "layouts":
+      return {
+        sortBy: "rank",
+        order: "asc",
+      };
+    case "categories":
+      return {
+        sortBy: "rank",
+        order: "asc",
+      };
+    case "tags":
+      return {
+        sortBy: "last_update",
+        order: "desc",
+      };
+    default:
+      return {
+        sortBy: "name",
+        order: "asc",
+      };
+  }
+};
 
 const compareItems = (sort: Sort) => {
   return (itemA: any, itemB: any) => {
@@ -23,7 +60,7 @@ const compareItems = (sort: Sort) => {
     }
     return 0;
   };
-}
+};
 
 const mapViewToSortItems = (
   selectedView: View | null,
@@ -44,25 +81,35 @@ const mapViewToSortItems = (
 };
 
 type SidebarProps = {
+  currentView: View | null;
   searchTerm: string;
-  selectedItem: any;
   layoutFilter: LayoutData | null;
 };
 const Sidebar: React.FC<SidebarProps> = ({
+  currentView,
   searchTerm,
   layoutFilter,
 }) => {
+  
+  const [sort, setSort] = useState<Sort>(initialSortValues(currentView));
+
+  useEffect(() => {
+    setSort(initialSortValues(currentView));
+  }, [currentView]);
 
   const theme = useTheme();
-  const [sort, setSort] = useState<Sort>({ sortBy: "last_update", order: "desc" });
   const router = useRouter();
   const dispatch = useDispatch();
-  const data = useSelector(({ itemsData }: { itemsData: CurationData }) => itemsData);
+  const { data } = useAllData({
+    filtered: true,
+  });
 
-  const { id } = router.query
-  const currentView = router.pathname.split('/')[1]
-  const currentItem = id ?? null
-  const searchPlaceholder = currentView ? `Search ${capitalize(currentView)}` : "";
+  const { id } = router.query;
+  const currentItem = id ?? null;
+  const searchPlaceholder = currentView
+    ? `Search ${capitalize(currentView)}`
+    : "";
+  
   const items = currentView ? data[currentView as View] : [];
   const sortedItems = items ? [...items].sort(compareItems(sort)) : [];
 
@@ -71,59 +118,56 @@ const Sidebar: React.FC<SidebarProps> = ({
   };
 
   const handleCreate = () => {
-    const basePath = router.pathname.split('/')[1]
-    dispatch(createItem());
-    router.push(`/${basePath}/?create=true`)
-  }
+    const basePath = router.pathname.split("/")[1];
+    router.push(`/${basePath}/?create=true`);
+  };
 
   return (
     <SidebarContainer disableGutters>
-      {items && <SearchInput
-        value={searchTerm}
-        onChange={handleSearchChange}
-        disableUnderline
-        fullWidth
-        placeholder={searchPlaceholder}
-        startAdornment={
-          <InputAdornment position="start">
-            <SearchIcon htmlColor={theme.palette.grey[600]} />
-          </InputAdornment>
-        }
-        endAdornment={
-          currentView === "windows" && (
-            <Filters
-              categories={data.categories}
-              layouts={data.layouts}
-              onSave={(filters) => dispatch(applyFilters(filters))}
-            />
-          )
-        }
-      />}
-      <SortBar
-        items={mapViewToSortItems(currentView as View, layoutFilter)}
-        sort={sort}
-        setSort={setSort}
-      />
       {currentView && (
-        <ItemsList
-          items={sortedItems}
-          selectedItem={currentItem as string}
-          selectedView={currentView as string}
-        />
-      )}
-      {currentView && (
-        <CreateButton onClick={() => handleCreate()} color="primary" variant="extended">
-          <CreateIcon />
-          Create
-        </CreateButton>
+        <>
+          <SearchInput
+            value={searchTerm}
+            onChange={handleSearchChange}
+            disableUnderline
+            fullWidth
+            placeholder={searchPlaceholder}
+            startAdornment={
+              <InputAdornment position="start">
+                <SearchIcon htmlColor={theme.palette.grey[600]} />
+              </InputAdornment>
+            }
+            endAdornment={
+              currentView === "windows" && (
+                <Filters
+                  categories={data.categories}
+                  layouts={data.layouts}
+                  onSave={(filters) => dispatch(applyFilters(filters))}
+                />
+              )
+            }
+          />
+          <SortBar
+            items={mapViewToSortItems(currentView, layoutFilter)}
+            sort={sort}
+            setSort={setSort}
+          />
+          <ItemsList items={sortedItems} selectedItem={currentItem as string} />
+          <CreateButton
+            onClick={() => handleCreate()}
+            color="primary"
+            variant="extended"
+          >
+            <CreateIcon />
+            Create
+          </CreateButton>
+        </>
       )}
     </SidebarContainer>
   );
 };
 
 type StateToProps = {
-  selectedView: View | null;
-  selectedItem: Item;
   searchTerm: string;
   filters: {
     layout: LayoutData | null;
@@ -131,13 +175,9 @@ type StateToProps = {
 };
 
 const mapStateToProps = ({
-  selectedView,
-  selectedItem,
   searchTerm,
   filters: { layout },
 }: StateToProps) => ({
-  selectedView,
-  selectedItem,
   searchTerm,
   layoutFilter: layout,
 });

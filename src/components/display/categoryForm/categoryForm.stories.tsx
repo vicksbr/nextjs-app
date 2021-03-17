@@ -18,10 +18,14 @@ type CategoryFormProps = React.ComponentProps<typeof CategoryForm>;
 const Template: Story<CategoryFormProps> = (args) => <CategoryForm {...args} />;
 
 export const Default = Template.bind({});
+
 export const InitialValue = Template.bind({});
+
 InitialValue.args = {
   initialValues: {
     name: "New Category Name",
     rank: 2,
+    last_update: new Date().getTime(),
+    id: "example-category-id",
   },
 };

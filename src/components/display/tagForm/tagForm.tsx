@@ -1,39 +1,87 @@
-import React, { useState, useEffect } from "react";
-import { FormControl, OutlinedInput } from "@material-ui/core";
+import React from "react";
+import { mutate } from "swr";
+import { useRouter } from "next/router";
+import { OutlinedInput } from "@material-ui/core";
 
+import Form from "../Form/Form";
+import useForm from "../../../../lib/useForm";
+import { NameField } from "./style";
 import { FormTitle, FieldLabel } from "../styles";
 
+import { TagData } from "types";
+import fetchJson from "../../../../lib/fetchJson";
+import { useAllData } from "../../../../lib/useAllData";
+
 type TagFormProps = {
-  initialValues?: {
-    name: string;
-  };
+  action: "create" | "update";
+  initialValues?: TagData;
 };
 
-const TagForm: React.FC<TagFormProps> = ({ initialValues }) => {
-  const [nameValue, setNameValue] = useState(initialValues?.name || "");
+type SubmitFields = Pick<TagData, "name">;
 
-  useEffect(() => {
-    if (initialValues?.name) {
-      setNameValue(initialValues.name);
+const TagForm: React.FC<TagFormProps> = ({ initialValues, action }) => {
+  const router = useRouter();
+  const { handleSubmit, register } = useForm();
+  const {
+    mutate: { tagsMutate },
+  } = useAllData({ filtered: true });
+
+  const handleUpdate = async (formValues: SubmitFields | any) => {
+    const id = initialValues?.id;
+    const name = formValues.name;
+
+    if (action === "update") {
+      await fetchJson(`/api/tags/${id}`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ name: name }),
+      });
     }
-  }, [initialValues]);
 
-  const handleNameChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setNameValue(event.target.value);
+    if (action === "create") {
+      const response = await fetchJson(`/api/tags`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ name: name }),
+      });
+
+      router.push(`/tags/${response.id}`, undefined, { shallow: true });
+    }
+
+    mutate("/api/tags");
+    tagsMutate();
+  };
+
+  const handleDelete = async () => {
+    const id = initialValues?.id;
+    await fetchJson(`/api/tags/${id}`, {
+      method: "DELETE",
+      headers: { "Content-Type": "application/json" },
+    });
+
+    mutate("/api/tags");
+    tagsMutate();
   };
 
   return (
-    <>
+    <Form
+      onSubmit={(e) => handleSubmit(e, handleUpdate)}
+      onDelete={handleDelete}
+      itemName={initialValues?.name}
+      lastModified={initialValues?.last_update}
+    >
       <FormTitle>Tags</FormTitle>
-      <FormControl>
+      <NameField>
         <FieldLabel>Tag Name</FieldLabel>
         <OutlinedInput
-          value={nameValue}
-          onChange={handleNameChange}
+          name="name"
+          inputRef={register}
+          key={initialValues?.name}
+          defaultValue={initialValues?.name}
           placeholder="Tag Name"
         />
-      </FormControl>
-    </>
+      </NameField>
+    </Form>
   );
 };
 

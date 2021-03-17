@@ -1,9 +1,7 @@
 import React from "react";
 import { useRouter } from "next/router";
-import { connect, useDispatch, useSelector } from "react-redux";
 
 import type { View } from "types";
-import { selectView, selectItem } from "store/actions";
 import Logo from "icons/logo";
 
 import useUser from "../../../lib/useUser";
@@ -22,30 +20,23 @@ import {
   TagIcon,
   LogoutIcon,
 } from "./styles";
-import { StoreState } from "store/reducers";
 
 const WINDOWS_VIEW = "windows"
 const LAYOUTS_VIEW = "layouts"
 const CATEGORIES_VIEW = "categories"
 const TAGS_VIEW = "tags"
 
-type MainMenuProps = {};
+type MainMenuProps = {
+  currentView: View | null
+};
 
-const MainMenu: React.FC<MainMenuProps> = () => {
+const MainMenu: React.FC<MainMenuProps> = ({ currentView }) => {
   const router = useRouter();
-  const dispatch = useDispatch();
   const { mutateUser } = useUser({ redirectTo: "/login" });
-  
-  const selectedView = useSelector<StoreState>((state) => state.selectedView);
 
   const handleViewSelect = (toView: View) => {
-    if (selectedView !== toView) {
-      dispatch(selectView(toView))
-      dispatch(selectItem(""))
-      router.push(`/${toView}`)
-    }
+    router.push(`/${toView}`)
   }
-  const currentView = router.pathname.split('/')[1]
 
   return (
     <MainMenuContainer>
@@ -98,8 +89,4 @@ const MainMenu: React.FC<MainMenuProps> = () => {
   );
 };
 
-const mapStateToProps = ({ selectedView }: { selectedView: View | null }) => ({
-  selectedView,
-});
-
-export default connect(mapStateToProps)(MainMenu);
+export default MainMenu;

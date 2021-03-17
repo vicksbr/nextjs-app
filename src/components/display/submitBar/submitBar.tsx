@@ -1,9 +1,9 @@
 import React, { useState } from "react";
+import { useRouter } from "next/router";
 import { Button, Dialog } from "@material-ui/core";
 import { DeleteOutline } from "@material-ui/icons";
 
 import { formatDate } from "utils/date";
-
 import {
   SubmitBarContainer,
   DeleteButton,
@@ -16,10 +16,10 @@ import {
 } from "./styles";
 
 type SubmitBarProps = {
-  lastModified?: Date;
+  lastModified?: number;
   itemName: string;
   handleDelete: () => void;
-  handleSubmit: () => void;
+  handleSubmit?: () => void;
 };
 const SubmitBar: React.FC<SubmitBarProps> = ({
   lastModified,
@@ -29,6 +29,8 @@ const SubmitBar: React.FC<SubmitBarProps> = ({
 }) => {
   const [dialogOpen, setDialogOpen] = useState(false);
 
+  const router = useRouter()
+
   const handleOpenDialog = () => {
     setDialogOpen(true);
   };
@@ -37,8 +39,17 @@ const SubmitBar: React.FC<SubmitBarProps> = ({
     setDialogOpen(false);
   };
 
+  const handleDeleteFn = () => {
+    const currentView = router.pathname.split("/")[1];
+
+    handleDelete()
+    setDialogOpen(false);
+    router.push(`/${currentView}`)
+  }
+
   return (
     <SubmitBarContainer>
+
       <DeleteButton variant="contained" onClick={handleOpenDialog}>
         <DeleteOutline />
       </DeleteButton>
@@ -47,7 +58,7 @@ const SubmitBar: React.FC<SubmitBarProps> = ({
           Last Modify on {formatDate(lastModified)}
         </LastModifiedDate>
       )}
-      <Button variant="contained" onClick={handleSubmit}>
+      <Button variant="contained" type="submit" onClick={handleSubmit}>
         save changes
       </Button>
       <Dialog open={dialogOpen} onClose={handleCloseDialog}>
@@ -57,7 +68,7 @@ const SubmitBar: React.FC<SubmitBarProps> = ({
           </ConfirmationMessage>
           <ButtonsContainer>
             <Button onClick={handleCloseDialog}>cancel</Button>
-            <ConfirmButton onClick={handleDelete}>confirm</ConfirmButton>
+            <ConfirmButton onClick={handleDeleteFn}>confirm</ConfirmButton>
           </ButtonsContainer>
         </DeleteModal>
       </Dialog>

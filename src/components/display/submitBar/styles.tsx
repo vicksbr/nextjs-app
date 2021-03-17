@@ -6,6 +6,11 @@ const SubmitBarContainer = styled(Box)({
   justifyContent: "space-between",
   alignItems: "center",
   boxShadow: "0px -4px 15px rgba(89, 89, 144, 0.15)",
+  position: "fixed",
+  bottom: 0,
+  right: 0,
+  width: "calc(100% - 416px)",
+  background: "#fff",
 });
 
 const DeleteButton = styled(Button)(({ theme }) => ({

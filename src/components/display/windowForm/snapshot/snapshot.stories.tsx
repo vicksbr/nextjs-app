@@ -18,25 +18,49 @@ export const CreatingWindow = Template.bind({});
 CreatingWindow.args = {
   window: {
     name: "World News",
-    last_update: new Date(),
-    type: "flux",
+    window_type: "flux",
     id: "window1",
-    rank: [],
-    basePath: '/windows',
   },
-  board: "board1",
+  board: {
+    name: "Gaming",
+    id: "2d52b358-dab4-4665-b734-e9f4a40a56a0",
+    windows: [
+      {
+        name: "League of Legends",
+        id: "2d52b358-dab4-4665-b734-e9f4a40a56a1",
+        window_type: "chart",
+      },
+      {
+        name: "Dota 2",
+        id: "2d52b358-dab4-4665-b734-e9f4a40a56a2",
+        window_type: "flux",
+      },
+    ],
+  },
 };
 
 export const EditingWindow = Template.bind({});
 EditingWindow.args = {
   window: {
     name: "World News",
-    last_update: new Date(),
-    type: "flux",
+    window_type: "flux",
     id: "window1",
-    rank: [],
-    basePath: '/windows',
   },
-  board: "board1",
-  snapshotDate: new Date(),
+  board: {
+    name: "Gaming",
+    id: "2d52b358-dab4-4665-b734-e9f4a40a56a0",
+    windows: [
+      {
+        name: "League of Legends",
+        id: "2d52b358-dab4-4665-b734-e9f4a40a56a1",
+        window_type: "chart",
+      },
+      {
+        name: "Dota 2",
+        id: "2d52b358-dab4-4665-b734-e9f4a40a56a2",
+        window_type: "flux",
+      },
+    ],
+  },
+  date: new Date().getTime(),
 };

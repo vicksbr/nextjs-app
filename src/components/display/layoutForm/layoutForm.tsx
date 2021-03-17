@@ -1,8 +1,14 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
+import { mutate } from "swr";
+import { useRouter } from "next/router";
 import { OutlinedInput, Switch } from "@material-ui/core";
 
 import ThumbnailPicker from "components/thumbnailPicker";
 
+import fetchJson from "../../../../lib/fetchJson";
+import useForm from "../../../../lib/useForm";
+import { useAllData } from "../../../../lib/useAllData";
+import Form from "../Form/Form";
 import { FieldLabel, FormTitle } from "../styles";
 import {
   FormGrid,
@@ -13,77 +19,115 @@ import {
   RankField,
 } from "./styles";
 
+import type { LayoutData } from "types";
+
 type LayoutFormProps = {
-  initialValues?: {
-    name?: string;
-    active?: boolean;
-    thumbnail?: string;
-    rank?: number;
-  };
+  action: "create" | "update";
+  initialValues?: LayoutData;
 };
 
-const emptyValues: LayoutFormProps["initialValues"] = {
-  name: "",
-  active: false,
-  thumbnail: "",
-  rank: 1,
+type LayoutFormFields = Omit<LayoutData, "id" | "last_update" | "active"> & {
+  active: string;
 };
 
-const getChangeEventValue = (
-  event: React.ChangeEvent<HTMLInputElement>
-): string => {
-  return event.target.value;
+const formOptions = {
+  skipFormData: ["active"],
 };
 
-const LayoutForm: React.FC<LayoutFormProps> = ({
-  initialValues,
-}) => {
-  const [values, setValues] = useState(initialValues || emptyValues);
+const LayoutForm: React.FC<LayoutFormProps> = ({ initialValues, action }) => {
+  const router = useRouter();
+  const { handleSubmit, register, registerFields } = useForm(formOptions);
+  const {
+    mutate: { layoutsMutate },
+  } = useAllData({ filtered: true });
 
   const updateValue = (field: string, value: any) => {
-    setValues((prev) => ({
+    registerFields((prev) => ({
       ...prev,
       [field]: value,
     }));
   };
 
-  useEffect(() => {
-    if (initialValues) {
-      setValues(initialValues)
-    }
-  }, [initialValues]);
+  const handleUpdate = async (formValues: LayoutFormFields) => {
+    const id = initialValues?.id;
+    const newValues = {
+      name: formValues.name,
+      active: formValues.active === "true" ? true : false,
+      rank: formValues.rank,
+      thumbnail: formValues.thumbnail,
+    };
 
-  const changeHandlers = {
-    name: (event: React.ChangeEvent<HTMLInputElement>) => updateValue("name", getChangeEventValue(event)),
-    active: () => updateValue("active", values.active === true ? false : true),
-    rank: (event: React.ChangeEvent<HTMLInputElement>) => updateValue("rank", getChangeEventValue(event)),
+    if (action === "update") {
+      await fetchJson(`/api/curated/layouts/${id}`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(newValues),
+      });
+    }
+
+    if (action === "create") {
+      const response = await fetchJson(`/api/curated/layouts`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(newValues),
+      });
+      router.push(`/layouts/${response.id}`, undefined, { shallow: true });
+    }
+
+    mutate("/api/curated/layouts");
+    layoutsMutate();
+  };
+
+  const handleDelete = async () => {
+    const id = initialValues?.id;
+    await fetchJson(`/api/curated/layouts/${id}`, {
+      method: "DELETE",
+      headers: { "Content-Type": "application/json" },
+    });
+
+    mutate("/api/curated/layouts");
+    layoutsMutate();
   };
 
   return (
-    <>
+    <Form
+      onSubmit={(e) => handleSubmit(e, handleUpdate)}
+      onDelete={handleDelete}
+      itemName={initialValues?.name}
+      lastModified={initialValues?.last_update}
+    >
       <FormTitle>Layouts</FormTitle>
       <FormGrid>
         <NameField variant="outlined">
           <FieldLabel>Layout Name</FieldLabel>
           <OutlinedInput
-            value={values.name}
-            onChange={changeHandlers.name}
+            name="name"
             placeholder="Layout Name"
+            defaultValue={initialValues?.name}
+            key={initialValues?.name}
+            inputRef={register}
           />
         </NameField>
         <ThumbnailField>
-          <ThumbnailPicker value={values.thumbnail} />
+          <ThumbnailPicker
+            key={initialValues?.id}
+            value={initialValues?.thumbnail}
+            ref={register}
+          />
         </ThumbnailField>
-        <StatusField>
+        <StatusField key={`${initialValues?.name}-${initialValues?.active}`}>
           <FieldLabel>Status</FieldLabel>
           <StatusControlLabel
             label="Active"
-            labelPlacement="start"
+            name="active"
+            inputRef={register}
             control={
               <Switch
-                checked={values.active}
-                onChange={changeHandlers.active}
-                color="primary"
+                defaultChecked={initialValues?.active}
+                onChange={(e, checked) => {
+                  e.target.checked = !!checked;
+                  updateValue("active", !!checked);
+                }}
               />
             }
           />
@@ -91,13 +135,15 @@ const LayoutForm: React.FC<LayoutFormProps> = ({
         <RankField>
           <FieldLabel>Rank</FieldLabel>
           <OutlinedInput
-            value={values.rank}
-            onChange={changeHandlers.rank}
+            key={initialValues?.rank}
             type="number"
+            name="rank"
+            inputRef={register}
+            defaultValue={initialValues?.rank}
           ></OutlinedInput>
         </RankField>
       </FormGrid>
-    </>
+    </Form>
   );
 };
 

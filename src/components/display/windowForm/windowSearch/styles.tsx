@@ -1,5 +1,5 @@
 import { Box, styled } from "@material-ui/core";
-import SendIcon from "@material-ui/icons/Send";
+import CachedIcon from "@material-ui/icons/Cached";
 
 const FieldsBox = styled(Box)({
   display: "grid",
@@ -14,7 +14,7 @@ const FieldsBox = styled(Box)({
   },
 });
 
-const SearchBoardsIcon = styled(SendIcon)({
+const SearchBoardsIcon = styled(CachedIcon)({
   cursor: "pointer",
 });
 

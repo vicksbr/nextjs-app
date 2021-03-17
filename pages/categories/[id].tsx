@@ -1,24 +1,23 @@
-import React from "react"
-import { useRouter } from "next/router"
+import React from "react";
+import { useRouter } from "next/router";
 
-import CategoryForm from "components/display/categoryForm"
-import { getCategoriesItemById } from "store/selectors";
-
+import CategoryForm from "components/display/categoryForm";
 import useUser from "../../lib/useUser";
+import { useAllData } from "../../lib/useAllData";
 
-import type { CategoryData } from "types"
+import type { CategoryData } from "types";
 
-const CategoriesDynamic = () => {
-    const router = useRouter()
-    const { user } = useUser({ redirectTo: "/login" });
+const CategoriesDynamic: React.FC = () => {
+  const router = useRouter();
+  const { user } = useUser({ redirectTo: "/login" });
+  const { data: { categories } } = useAllData();
 
-    if (!user?.isLoggedIn) return <>Loading</>
+  if (!user?.isLoggedIn) return <>Loading</>;
 
-    const item = getCategoriesItemById(router.query.id as string) ?? { name: '', rank: 1 }
+  const item = categories && categories.find((category: CategoryData) => category.id === router.query.id);
 
-    return (
-        <CategoryForm initialValues={item as CategoryData} />
-    )
-}
+  return <CategoryForm action="update" initialValues={item as CategoryData} />
 
-export default CategoriesDynamic
+};
+
+export default CategoriesDynamic;

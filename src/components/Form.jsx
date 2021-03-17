@@ -9,7 +9,9 @@ const Form = ({ errorMessage, onSubmit }) => (
       <span>Password</span>
       <input type="password" name="password" required />
     </label>
-    <Button type="submit" variant="contained">Login</Button>
+    <Button type="submit" variant="contained">
+      Login
+    </Button>
     {errorMessage && <p className="error">{errorMessage}</p>}
 
     <style jsx>{`
@@ -36,5 +38,3 @@ const Form = ({ errorMessage, onSubmit }) => (
 );
 
 export default Form;
-
-

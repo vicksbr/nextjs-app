@@ -1,13 +1,8 @@
 import React, { useState } from "react";
 import type { Story } from "@storybook/react";
 
-import { handlers } from "mock/handlers";
-
 export default {
   title: "Mock Api Viewer/Windows",
-  parameters: {
-    msw: handlers,
-  },
 };
 
 const newWindowData = {
@@ -15,7 +10,7 @@ const newWindowData = {
   description: "window description",
   thumbnail:
     "https://i.picsum.photos/id/38/460/460.jpg?hmac=xmyt6kZw_mADqCdDa7ab4-FAFQHpGnYjKkiNELPVVpQ",
-  type: "Flux",
+  type: "flux",
   tags: [
     {
       name: "gaming",
@@ -57,22 +52,20 @@ const newWindowData = {
   },
 };
 
+const baseUrl = "http://localhost:3000/api";
+
 export const Windows: Story = () => {
   const [response, setResponse] = useState<any>(null);
-  const resetWindows = () => {
-    fetch("/curated/windows/reset", { method: "POST" }).then(() =>
-      setResponse(null)
-    );
-  };
-  const listWindows = () => {
-    fetch("/curated/windows")
+
+  const listWindows = (filtersQueryString: string = "") => {
+    fetch(`${baseUrl}/curated/windows${filtersQueryString}`)
       .then((res) => res.json())
       .then((res) => {
         setResponse(res);
       });
   };
   const getWindow = (id: string) => {
-    fetch(`/curated/windows/${id}`)
+    fetch(`${baseUrl}/curated/windows/${id}`)
       .then((res) => res.json())
       .then((res) => {
         setResponse(res);
@@ -80,7 +73,7 @@ export const Windows: Story = () => {
   };
   const createWindow = () => {
     const data = JSON.stringify(newWindowData);
-    fetch("/curated/windows", { method: "POST", body: data })
+    fetch(`${baseUrl}/curated/windows`, { method: "POST", body: data })
       .then((res) => res.json())
       .then((res) => {
         setResponse(res);
@@ -88,7 +81,7 @@ export const Windows: Story = () => {
   };
   const editWindow = (id: string) => {
     const data = JSON.stringify(newWindowData);
-    fetch(`/curated/windows/${id}`, { method: "PATCH", body: data })
+    fetch(`${baseUrl}/curated/windows/${id}`, { method: "PATCH", body: data })
       .then((res) => res.json())
       .then((res) => {
         setResponse(res);
@@ -98,7 +91,7 @@ export const Windows: Story = () => {
       });
   };
   const deleteWindow = (id: string) => {
-    fetch(`/curated/windows/${id}`, { method: "DELETE" }).then(() => {
+    fetch(`${baseUrl}/curated/windows/${id}`, { method: "DELETE" }).then(() => {
       setResponse(null);
     });
   };
@@ -108,7 +101,7 @@ export const Windows: Story = () => {
       board: "2d52b358-dab4-4665-b734-e9f4a40a56a0",
       window: "1d52b358-dab4-4665-b734-e9f4a40a56a0",
     });
-    fetch(`/curated/windows/${id}/snapshot`, { method: "PUT", body: data })
+    fetch(`${baseUrl}/curated/windows/${id}/snapshot`, { method: "PUT", body: data })
       .then((res) => res.json())
       .then((res) => {
         setResponse(res);
@@ -117,8 +110,8 @@ export const Windows: Story = () => {
         setResponse(null);
       });
   };
-  const listUsers = () => {
-    fetch(`/users`)
+  const listUsers = (filterQueryString: string = "") => {
+    fetch(`${baseUrl}/users${filterQueryString}`)
       .then((res) => res.json())
       .then((res) => {
         setResponse(res);
@@ -128,7 +121,7 @@ export const Windows: Story = () => {
       });
   };
   const getUserBoards = (id: string) => {
-    fetch(`/users/${id}/boards`)
+    fetch(`${baseUrl}/users/${id}/boards`)
       .then((res) => res.json())
       .then((res) => {
         setResponse(res);
@@ -141,7 +134,12 @@ export const Windows: Story = () => {
     <div>
       <p>Requests:</p>
       <div>
-        <button onClick={listWindows}>get all curated windows</button>
+        <button onClick={() => listWindows()}>get all curated windows</button>
+        <button onClick={() => listWindows("?name=Ibovespa")}>filter name=Ibovespa</button>
+        <button onClick={() => listWindows("?type=flux,chart")}>filter type=flux,chart</button>
+        <button onClick={() => listWindows("?categories=\"gaming\"")}>filter categories="gaming"</button>
+        <button onClick={() => listWindows("?layout_id=bd4e4f66-2ae7-4447-8605-69247b0a92b5")}>filter layout_id=bd4e...</button>
+        <br/>
         <button onClick={() => getWindow("window1")}>
           get a curated window*
         </button>
@@ -151,11 +149,10 @@ export const Windows: Story = () => {
         <button onClick={() => updateSnapshot("window1")}>
           update snapshot*
         </button>
-        {" "}
-        <button onClick={resetWindows}>reset</button>
       </div>
       <div>
-        <button onClick={listUsers}>get fluxonaut users</button>
+        <button onClick={() => listUsers()}>get fluxonaut users</button>
+        <button onClick={() => listUsers("?name=fred")}>get fluxonaut users | name=fred</button>
         <button onClick={() => getUserBoards("userId")}>get user boards</button>
       </div>
       <hr />

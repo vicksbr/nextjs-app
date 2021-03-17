@@ -2,15 +2,10 @@ import React from "react";
 import type { Story } from "@storybook/react";
 
 import WindowSearch from ".";
-import { boards, windows, getBoards, getWindows } from "./data";
 
 export default {
   title: "WindowSearch",
   component: WindowSearch,
-  args: {
-    getBoards,
-    getWindows,
-  },
 };
 
 type WindowSearchProps = React.ComponentProps<typeof WindowSearch>;
@@ -24,9 +19,10 @@ export const Default = Template.bind({});
 export const Disabled = Template.bind({});
 Disabled.args = {
   initialValues: {
-    username: "granmagus",
-    board: boards[0],
-    window: windows[0],
+    username: "fred",
+    board: "2d52b358-dab4-4665-b734-e9f4a40a56a0",
+    window: "1d52b358-dab4-4665-b734-e9f4a40a56a0",
+    snapshot_date: new Date().getTime(),
   },
   disabled: true,
 };

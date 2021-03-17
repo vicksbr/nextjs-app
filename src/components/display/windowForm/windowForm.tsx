@@ -1,16 +1,28 @@
-import React, { useState } from "react";
-
-import { FormTitle, FieldLabel } from "../styles";
+import React, { useEffect, useState } from "react";
+import { useRouter } from "next/router";
 
 import {
+  FullWindowData,
+  TagData,
+  CategoryData,
+  LayoutData,
+  SnapshotInfo,
+  CreatedFrom,
+} from "types";
+import ThumbnailPicker from "components/thumbnailPicker";
+
+import { FormTitle, FieldLabel } from "../styles";
+import {
   GridContainer,
+  WindowSearchField,
+  SnapshotField,
+  ThumbnailField,
   DescriptionFormControl,
   TagsFormControl,
   CategoriesFormControl,
   OnboardingFormControl,
   StatusFormControl,
 } from "./styles";
-
 import {
   Description,
   Tags,
@@ -19,14 +31,14 @@ import {
   SelectedOnboardings,
   Status,
 } from "./sections";
-
-import { FullWindowData, TagData, CategoryData, LayoutData } from "types";
+import WindowSearch from "./windowSearch";
+import Snapshot from "./snapshot";
 
 type WindowFormProps = {
   availableTags: Array<TagData>;
   availableCategories: Array<CategoryData>;
   availableLayouts: Array<LayoutData>;
-  initialValues: FullWindowData;
+  initialValues?: FullWindowData;
 };
 
 const WindowForm: React.FC<WindowFormProps> = ({
@@ -35,37 +47,88 @@ const WindowForm: React.FC<WindowFormProps> = ({
   availableLayouts,
   initialValues,
 }) => {
-  const [description, setDescription] = useState(
-    initialValues?.description || ""
-  );
-  const [tags, setTags] = useState<FullWindowData["tags"]>(
-    initialValues?.tags || []
-  );
+  const [description, setDescription] = useState("");
+  const [tags, setTags] = useState<FullWindowData["tags"]>([]);
   const [category, setCategory] = useState<FullWindowData["category"] | null>(
-    initialValues?.category || null
+    null
   );
-  const [onboardings, setOnboardings] = useState(initialValues?.layouts || []);
-  const [status, setStatus] = useState(
-    initialValues
-      ? {
+  const [newCreatedFrom, setNewCreatedFrom] = useState<CreatedFrom | null>(null);
+  const [onboardings, setOnboardings] = useState<FullWindowData["layouts"]>([]);
+  const [status, setStatus] = useState({ active: false, featured: false });
+  const [snapshotInfo, setSnapshotInfo] = useState<SnapshotInfo | null>(null);
+
+  const router = useRouter();
+  const curatedWindowId = router.query.id;
+
+  const handleDescriptionChange = (value: string) => {
+    setDescription(value.length > 160 ? value.slice(0, 160) : value);
+  };
+
+  useEffect(() => {
+    if (initialValues) {
+      setDescription(initialValues.description || "");
+      setTags(initialValues.tags || []);
+      setCategory(initialValues?.category || null);
+      setOnboardings(initialValues?.layouts || []);
+      setStatus(
+        {
           active: initialValues.active,
           featured: initialValues.featured,
-        }
-      : { active: false, featured: false }
-  );
+        } || { active: false, featured: false }
+      );
+    }
+  }, [initialValues]);
+
+  const takeSnapshot = () => {
+    if (snapshotInfo) {
+      const data = {
+        username: snapshotInfo.username,
+        board: snapshotInfo.board.id,
+        window: snapshotInfo.window.id,
+      }
+      fetch(`/api/curated/windows/${curatedWindowId}/snapshot`, {
+        method: "PUT",
+        body: JSON.stringify(data),
+      })
+        .then((res) => res.json())
+        .then((res) => setNewCreatedFrom(res))
+        .catch(() => console.log("error taking snapshot"));
+    }
+  };
 
   return (
     <>
-      <FormTitle>Edit Window</FormTitle>
+      <FormTitle>{initialValues ? "Edit Window" : "Create Window"}</FormTitle>
       <GridContainer>
+        <WindowSearchField>
+          <WindowSearch
+            clearSnapshot={() => setSnapshotInfo(null)}
+            initialValues={newCreatedFrom || initialValues?.created_from}
+            onSelectWindow={(username, board, window, date) => {
+              setSnapshotInfo({
+                username,
+                board,
+                window,
+                date,
+              });
+            }}
+          />
+        </WindowSearchField>
+        <SnapshotField>
+          <Snapshot {...snapshotInfo} onUpdate={takeSnapshot} />
+        </SnapshotField>
         <DescriptionFormControl>
           <FieldLabel>Description</FieldLabel>
           <Description
             description={description}
-            descriptionHandler={(event) => setDescription(event.target.value)}
+            descriptionHandler={(event) =>
+              handleDescriptionChange(event.target.value)
+            }
           />
         </DescriptionFormControl>
-
+        <ThumbnailField>
+          <ThumbnailPicker value={initialValues?.thumbnail} />
+        </ThumbnailField>
         <TagsFormControl>
           <FieldLabel>Tags</FieldLabel>
           <Tags

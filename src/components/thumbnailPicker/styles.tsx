@@ -34,6 +34,7 @@ const styles = makeStyles((theme) => ({
   cropper: {
     width: "100%",
     marginBottom: 20,
+    height: 0,
     flex: "1",
   },
   buttonsContainer: {
@@ -46,11 +47,33 @@ const styles = makeStyles((theme) => ({
     display: "flex",
     alignItems: "center",
     justifyContent: "center",
-    maxWidth: "460px",
     height: "146px",
     position: "relative",
     cursor: "pointer",
     backgroundColor: "#979797",
+    borderRadius: "4px",
+    overflow: "hidden",
+  },
+  "@keyframes dropAcceptSlide": {
+    "0%": {
+      backgroundPosition: "0 0",
+    },
+    "100%": {
+      backgroundPosition: "-70px 0",
+    },
+  },
+  acceptDrop: {
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+    height: "146px",
+    position: "relative",
+    cursor: "pointer",
+    backgroundColor: "#979797",
+    backgroundSize: "150% 100%",
+    backgroundImage:
+      "repeating-linear-gradient(-45deg, #8f8f8f, #8f8f8f 25px, transparent 25px, transparent 50px)",
+    animation: "$dropAcceptSlide 2s linear infinite",
     borderRadius: "4px",
     overflow: "hidden",
   },

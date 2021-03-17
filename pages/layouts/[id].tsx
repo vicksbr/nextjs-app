@@ -1,21 +1,24 @@
 import React from "react";
-import LayoutForm from "components/display/layoutForm"
 import { useRouter } from "next/router";
-import useUser from "../../lib/useUser";
-import { getLayoutsItemById } from "store/selectors";
-import { LayoutData } from "types";
 
+import useUser from "../../lib/useUser";
+import LayoutForm from "components/display/layoutForm";
+import { useAllData } from "../../lib/useAllData";
+
+import type { LayoutData } from "types";
 
 const LayoutsDynamic: React.FC = () => {
-    const { user } = useUser({ redirectTo: "/login" });
-    const router = useRouter()
-    const item = getLayoutsItemById(router.query.id as string) ?? { name: '' }
+  const router = useRouter();
+  const { user } = useUser({ redirectTo: "/login" });
+  const { data: { layouts } } = useAllData();
 
-    if (!user?.isLoggedIn) return <>Loading</>
+  if (!user?.isLoggedIn) return <>Loading</>;
 
-    return (
-        <LayoutForm initialValues={item as LayoutData} />
-    )
-}
+  const item = layouts && layouts.find((layout: LayoutData) => layout.id === router.query.id);
+
+  return (
+    <LayoutForm action="update" initialValues={item as LayoutData} />
+  );
+};
 
 export default LayoutsDynamic;

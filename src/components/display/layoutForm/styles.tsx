@@ -7,7 +7,8 @@ const FormGrid = styled(Box)({
     'name name thumbnail'
     'status rank thumbnail'`,
   gap: "25px",
-  gridTemplateColumns: "calc(26% - 12.5px) calc(26% - 12.5px) calc(48% - 25px)",
+  gridTemplateColumns: "1fr 1fr calc(48% - 12.5px)",
+  paddingBottom: 80,
 });
 
 const NameField = styled(FormControl)({

@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import React, { useRef, useState, forwardRef, RefCallback } from "react";
 import Modal from "@material-ui/core/Modal";
 import Dropzone from "react-dropzone";
 import Cropper from "react-cropper";
@@ -12,10 +12,15 @@ import { FieldLabel } from "components/display/styles";
 
 type ThumbnailPickerProps = {
   value?: string;
+  ref?: any;
 };
-const ThumbnailPicker: React.FC<ThumbnailPickerProps> = ({ value }) => {
+
+const ThumbnailPicker: React.FC<ThumbnailPickerProps> = forwardRef<
+  RefCallback<HTMLImageElement> & HTMLImageElement,
+  ThumbnailPickerProps
+>(({ value }, register) => {
   const cropperRef = useRef<HTMLImageElement & { cropper: any }>(null);
-  const [croppedImg, setCrop] = useState("");
+  const [croppedImg, setCrop] = useState(value);
   const [isModalOpen, showModal] = useState(false);
   const [file, setFile] = useState("");
 
@@ -67,7 +72,12 @@ const ThumbnailPicker: React.FC<ThumbnailPickerProps> = ({ value }) => {
                 Drag & Drop an Image Here
               </Typography>
               {(croppedImg || value) && (
-                <img className={classes.image} src={croppedImg || value}></img>
+                <img
+                  key={`${value}-${croppedImg}`}
+                  ref={register}
+                  className={classes.image}
+                  src={croppedImg || value}
+                ></img>
               )}
               <input {...getInputProps({ onChange: handleFile })} />
             </div>
@@ -83,9 +93,8 @@ const ThumbnailPicker: React.FC<ThumbnailPickerProps> = ({ value }) => {
                 <Cropper
                   src={file}
                   ref={cropperRef}
-                  aspectRatio={1}
                   className={classes.cropper}
-                  preview=".img-preview"
+                  aspectRatio={1}
                   dragMode="move"
                   guides={false}
                   viewMode={1}
@@ -112,6 +121,6 @@ const ThumbnailPicker: React.FC<ThumbnailPickerProps> = ({ value }) => {
       </Dropzone>
     </div>
   );
-};
+});
 
 export default ThumbnailPicker;

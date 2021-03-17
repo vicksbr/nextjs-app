@@ -18,5 +18,5 @@ const Template: Story<SubmitBarProps> = (args) => <SubmitBar {...args} />;
 export const Default = Template.bind({});
 export const WithModifiedDate = Template.bind({});
 WithModifiedDate.args = {
-  lastModified: new Date(),
+  lastModified: new Date().getTime(),
 };

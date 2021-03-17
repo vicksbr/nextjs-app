@@ -1,18 +1,18 @@
 import { Box, Button, styled, Typography } from "@material-ui/core";
-import { Edit, Cached } from "@material-ui/icons";
+import CenterFocusWeakIcon from "@material-ui/icons/CenterFocusWeak";
 
 const SnapshotContainer = styled(Box)(({ theme }) => ({
   borderRadius: theme.shape.borderRadius,
   border: `1px solid ${theme.palette.grey[400]}`,
-  padding: "12px 12px 9px 16px",
-  minHeight: "124px",
+  padding: "12px 12px 4px 16px",
+  minHeight: "126px",
   display: "flex",
   flexWrap: "wrap",
   justifyContent: "space-between",
 }));
 
 const WindowInfoContainer = styled(Box)({
-  marginBottom: "15px",
+  marginBottom: "0",
 });
 
 const WindowInfo = styled(Typography)(({ theme }) => ({
@@ -20,7 +20,7 @@ const WindowInfo = styled(Typography)(({ theme }) => ({
   lineHeight: "24px",
 }));
 
-const WindowId = styled(Typography)(({ theme }) => ({
+const Username = styled(Typography)(({ theme }) => ({
   fontSize: "12px",
   lineHeight: "16px",
   color: theme.palette.grey[500],
@@ -36,11 +36,7 @@ const SnapshotDate = styled(Typography)(({ theme }) => ({
 const ButtonsContainer = styled(Box)({
   flexBasis: "100%",
   textAlign: "right",
-});
-
-const ChangeWindowButton = styled(Button)({
-  fontSize: "12px",
-  marginRight: "17px",
+  alignSelf: "flex-end",
 });
 
 const iconsSize = {
@@ -48,27 +44,26 @@ const iconsSize = {
   height: "15px",
 };
 
-const EditIcon = styled(Edit)({
-  ...iconsSize,
-});
-
 const UpdateButton = styled(Button)({
   fontSize: "12px",
+  fontWeight: 500,
+  letterSpacing: "1.1111px",
+  display: "inline",
+  color: "#005CB2",
 });
 
-const UpdateIcon = styled(Cached)({
+const UpdateIcon = styled(CenterFocusWeakIcon)({
   ...iconsSize,
+  verticalAlign: "sub",
 });
 
 export {
   SnapshotContainer,
   WindowInfoContainer,
   WindowInfo,
-  WindowId,
+  Username,
   SnapshotDate,
   ButtonsContainer,
-  ChangeWindowButton,
-  EditIcon,
   UpdateButton,
   UpdateIcon,
 };

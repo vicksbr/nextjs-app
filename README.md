@@ -1,44 +1,104 @@
-# Example Next.js application using [`next-iron-session`](https://github.com/vvo/next-iron-session)
+# Curatool
 
-This example creates an authentication system that uses a **signed and encrypted cookie to store session data**. It relies on [`next-iron-session`](https://github.com/vvo/next-iron-session).
+demo_link
 
-It uses current best practices for authentication in the Next.js ecosystem.
+Curatool is a web application that act as a CMS upon Fluxonaut custom 
+Window/Layout data a.k.a "CURATED WINDOWS".  
 
-**Features:**
 
-- [Static Generation](https://nextjs.org/docs/basic-features/pages#static-generation-recommended) (SG), recommended example
-- [Server-side Rendering](https://nextjs.org/docs/basic-features/pages#server-side-rendering) (SSR) example in case you need it
-- Logged in status synchronized between browser windows/tabs using **`withUser`** hook and [`swr`](https://swr.now.sh/) module
-- Layout based on logged-in status
-- Session data is signed and encrypted in a cookie
+## Features
 
-This example creates an authentication system that uses a **signed and encrypted cookie to store session data**. It relies on [`next-iron-session`](https://github.com/vvo/next-iron-session).
+Graphic interface to manage(create,update,delete) all metadata used to build a "Curated Window", 
 
-It uses current best practices for authentication in the Next.js ecosystem.
 
-**Features:**
+1) Window
+2) Layouts
+3) Categories
+4) Tags
 
-- [Static Generation](https://nextjs.org/docs/basic-features/pages#static-generation-recommended) (SG), recommended example
-- [Server-side Rendering](https://nextjs.org/docs/basic-features/pages#server-side-rendering) (SSR) example in case you need it
-- Logged in status synchronized between browser windows/tabs using **`withUser`** hook and [`swr`](https://swr.now.sh/) module
-- Layout based on the user's logged-in/out status
-- Session data is signed and encrypted in a cookie
 
----
+## Architecture 
 
-<p align="center"><b>Online demo at <a href="https://next-iron-session.now.sh/">https://next-iron-session.now.sh/</a> 👀</b></p>
+Todo...
 
----
+## Built With (Dependencies)
 
-## Deploy your own
+- [ReactJS](https://reactjs.org/) version: 17
+- [NextJS](https://nextjs.org/) version: 10.0.5
+- [Next-iron-session](https://next-iron-session.now.sh/) version: 4.1
+- [Material-UI](https://next.material-ui.com/) version: 5.0.0-alpha.24
+- [Typescript](https://www.typescriptlang.org/) version: 4.2
+- [Storybook](https://storybook.js.org/) version: 6.1
+- [Redux](https://redux.js.org/) version: 4.0.5
+- [SWR](https://swr.vercel.app/) version: 0.5 
 
-Deploy the example using [ZEIT Now](https://zeit.co/now):
+## Local development setup
 
-[![Deploy with ZEIT Now](https://zeit.co/button)](https://zeit.co/import/project?template=https://github.com/vvo/next-iron-session/tree/master/example)
+Assuming you're on OS X & Linux, clone the repository:
 
-## ⚠️ Always create your own `SECRET_COOKIE_PASSWORD`
+```sh
+git clone https://github.com/citrusys/curatool
+```
 
-This example hardcode the `SECRET_COOKIE_PASSWORD` environment variable used as a `password` to [`withIronSession`](https://github.com/vvo/next-iron-session#withironsessionhandler--password-ttl-cookiename-cookieoptions-) call. But in the real world you should:
+Install JS dependencies:
 
-1. Generate your own 32 characters minimum `SECRET_COOKIE_PASSWORD` via https://1password.com/password-generator/ for example
-2. Store this key in a secrets management system like https://zeit.co/docs/v2/serverless-functions/env-and-secrets
+```sh
+cd curatool && yarn install
+```
+
+Then, run the next development local server:
+
+```sh
+yarn dev
+```
+
+and then access http://localhost:300
+
+
+## Production Build
+
+```sh
+yarn build
+```
+
+And then serve it with next production local server
+
+```sh
+yarn start
+```
+
+and then access http://localhost:300
+
+## Testing 
+
+We're using storybook to aid development and testing
+
+```sh
+yarn storybook
+```
+
+## Deploy
+
+Todo
+
+## Release History
+
+Todo
+
+## Contributing
+
+1. Clone the repository
+2. Create your feature branch
+3. Write your code
+4. Test your code
+5. Commit your changes
+6. Push to the remote branch
+7. Open a new Pull Request
+8. Write what your Pull Request wants to achieve and what you are adding/changing
+9. Wait for your Code Review approval and then correct/merge your branch.
+
+## Authors
+
+- **Lucas Lucafo**
+- **Pedro Puzzi**
+- **Humberto Julião**
