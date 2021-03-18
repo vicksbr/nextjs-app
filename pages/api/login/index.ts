@@ -6,14 +6,9 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   switch (req.method) {
     case "POST":
       const { user, password } = req.body;
-      
       if (user === "admin" && password === "admin") {
         res.statusCode = 200;
-        res.json({
-          "isLoggedIn":true,
-          "name":"Fluxonauto da silva",
-          "id":"999"
-        });
+        res.json({});
       } else {
         res.statusCode = 401;
         res.json({

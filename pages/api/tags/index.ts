@@ -13,7 +13,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
     case "GET":
       res.statusCode = 200;
       if (req.query.name) {
-        res.json(itemsData.tags.filter((tag: any) => tag.name.toLowerCase().includes(req.query.name)));
+        res.json(itemsData.tags.filter((tag) => tag.name === req.query.name));
       } else {
         res.json(itemsData.tags);
       }

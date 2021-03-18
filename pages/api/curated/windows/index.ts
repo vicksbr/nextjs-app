@@ -17,7 +17,9 @@ const filterWindows = (
     if (value && typeof value === "string") {
       switch (key) {
         case "name":
-          filteredWindows = filteredWindows.filter((window) => window.name.toLowerCase().includes(value));
+          filteredWindows = filteredWindows.filter(
+            (window) => window.name === value
+          );
           return;
         case "categories":
           const categories = value

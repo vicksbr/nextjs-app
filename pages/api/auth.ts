@@ -1,7 +1,7 @@
 import withSession from "../../lib/session";
 
-const auth = async (user: string, password: string) =>
-  await fetch("/api/login", {
+const auth = async (user: string, password: string, origin: string) =>
+  await fetch(`${origin}/api/login`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({
@@ -12,8 +12,9 @@ const auth = async (user: string, password: string) =>
 
 export default withSession(async (req: any, res: any) => {
   const { user: username, password } = await req.body;
+  const origin = req.headers.origin;
   try {
-    const response = await auth(username, password);
+    const response = await auth(username, password, origin);
     if (response.ok) {
       const user = { isLoggedIn: true, username };
       req.session.set("user", user);
