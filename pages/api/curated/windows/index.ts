@@ -17,7 +17,9 @@ const filterWindows = (
     if (value && typeof value === "string") {
       switch (key) {
         case "name":
-          filteredWindows = filteredWindows.filter((window) => window.name.toLowerCase().includes(value));
+          filteredWindows = filteredWindows.filter(
+            (window) => window.name === value
+          );
           return;
         case "categories":
           const categories = value
@@ -62,9 +64,8 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
       res.json(windowsBasicData);
       break;
     case "POST":
-      const newWindowInfo = JSON.parse(req.body);
       const newWindow = {
-        ...newWindowInfo,
+        ...req.body,
         last_update: new Date().getTime(),
         id: randomUUID(),
       };

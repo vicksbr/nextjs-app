@@ -3,7 +3,7 @@ import type { NextApiRequest, NextApiResponse } from "next";
 import { fullWindowsData } from "mockedData";
 
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
-  await runMiddleware(req, res, cors(["GET", "PATCH", "DELETE"]));
+  await runMiddleware(req, res, cors(["GET", "PUT", "DELETE"]));
 
   const {
     query: { id },
@@ -15,17 +15,17 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
       res.statusCode = window ? 200 : 400;
       res.json(window || "");
       break;
-    case "PATCH":
-      const newWindowInfo = JSON.parse(req.body);
+    case "PUT":
       const windowToEdit = fullWindowsData.findIndex(
         (window) => window.id === id
       );
       fullWindowsData[windowToEdit] = {
         ...fullWindowsData[windowToEdit],
-        ...newWindowInfo,
+        ...req.body,
+        last_update: new Date().getTime(),
       };
       res.statusCode = 200;
-      res.send("");
+      res.json({});
       break;
     case "DELETE":
       const windowToRemove = fullWindowsData.findIndex(
@@ -33,7 +33,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
       );
       fullWindowsData.splice(windowToRemove, 1);
       res.statusCode = 200;
-      res.send("");
+      res.json({});
       break;
     default:
       res.statusCode = 400;

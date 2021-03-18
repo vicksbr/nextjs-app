@@ -24,10 +24,12 @@ const WindowsDynamic: React.FC = () => {
 
   return (
     <WindowForm
+      action="update"
       availableCategories={categories}
       availableLayouts={layouts}
       availableTags={tags}
       initialValues={item as FullWindowData}
+
     />
   );
 };

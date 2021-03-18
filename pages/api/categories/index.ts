@@ -11,7 +11,11 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
     case "GET":
       res.statusCode = 200;
       if (req.query.name) {
-          res.json(itemsData.categories.filter((c: any) => c.name.toLowerCase().includes(req.query.name)));
+        res.json(
+          itemsData.categories.filter(
+            (category) => category.name === req.query.name
+          )
+        );
       } else {
         res.json(itemsData.categories);
       }

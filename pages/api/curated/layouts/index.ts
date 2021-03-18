@@ -11,7 +11,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
     case "GET":
       res.statusCode = 200;
       if (query.name) {
-        res.json(itemsData.layouts.filter((layout: any) => layout.name.toLowerCase().includes(req.query.name)));
+        res.json(itemsData.layouts.filter((layout) => layout.name === query.name));
       } else {
         res.json(itemsData.layouts);
       }

@@ -7,7 +7,6 @@ import ThumbnailPicker from "components/thumbnailPicker";
 
 import fetchJson from "../../../../lib/fetchJson";
 import useForm from "../../../../lib/useForm";
-import { useAllData } from "../../../../lib/useAllData";
 import Form from "../Form/Form";
 import { FieldLabel, FormTitle } from "../styles";
 import {
@@ -37,9 +36,6 @@ const formOptions = {
 const LayoutForm: React.FC<LayoutFormProps> = ({ initialValues, action }) => {
   const router = useRouter();
   const { handleSubmit, register, registerFields } = useForm(formOptions);
-  const {
-    mutate: { layoutsMutate },
-  } = useAllData({ filtered: true });
 
   const updateValue = (field: string, value: any) => {
     registerFields((prev) => ({
@@ -75,7 +71,6 @@ const LayoutForm: React.FC<LayoutFormProps> = ({ initialValues, action }) => {
     }
 
     mutate("/api/curated/layouts");
-    layoutsMutate();
   };
 
   const handleDelete = async () => {
@@ -86,7 +81,6 @@ const LayoutForm: React.FC<LayoutFormProps> = ({ initialValues, action }) => {
     });
 
     mutate("/api/curated/layouts");
-    layoutsMutate();
   };
 
   return (
