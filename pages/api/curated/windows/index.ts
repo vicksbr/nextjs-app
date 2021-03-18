@@ -64,9 +64,8 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
       res.json(windowsBasicData);
       break;
     case "POST":
-      const newWindowInfo = JSON.parse(req.body);
       const newWindow = {
-        ...newWindowInfo,
+        ...req.body,
         last_update: new Date().getTime(),
         id: randomUUID(),
       };

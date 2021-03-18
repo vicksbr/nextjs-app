@@ -50,7 +50,7 @@ const SubmitBar: React.FC<SubmitBarProps> = ({
   return (
     <SubmitBarContainer>
 
-      <DeleteButton variant="contained" onClick={handleOpenDialog}>
+      <DeleteButton variant="contained" type="button" onClick={handleOpenDialog}>
         <DeleteOutline />
       </DeleteButton>
       {lastModified && (
