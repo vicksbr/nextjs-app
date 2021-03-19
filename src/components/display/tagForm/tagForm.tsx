@@ -20,13 +20,14 @@ type SubmitFields = Pick<TagData, "name">;
 
 const TagForm: React.FC<TagFormProps> = ({ initialValues, action }) => {
   const router = useRouter();
-  const { handleSubmit, register } = useForm();
+  const { handleSubmit, register, isCommiting, setIsCommiting } = useForm();
 
   const handleUpdate = async (formValues: SubmitFields | any) => {
     const id = initialValues?.id;
     const name = formValues.name;
 
     if (action === "update") {
+      setIsCommiting(true)
       await fetchJson(`/api/tags/${id}`, {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
@@ -35,6 +36,7 @@ const TagForm: React.FC<TagFormProps> = ({ initialValues, action }) => {
     }
 
     if (action === "create") {
+      setIsCommiting(true)
       const response = await fetchJson(`/api/tags`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -44,18 +46,22 @@ const TagForm: React.FC<TagFormProps> = ({ initialValues, action }) => {
       router.push(`/tags/${response.id}`, undefined, { shallow: true });
     }
 
-    mutate("/api/tags");
+    await mutate("/api/tags");
+    setIsCommiting(false)
 
   };
 
   const handleDelete = async () => {
     const id = initialValues?.id;
+    setIsCommiting(true)
     await fetchJson(`/api/tags/${id}`, {
       method: "DELETE",
       headers: { "Content-Type": "application/json" },
     });
 
-    mutate("/api/tags");
+    await mutate("/api/tags");
+    setIsCommiting(false)
+
   };
 
   return (
@@ -64,6 +70,7 @@ const TagForm: React.FC<TagFormProps> = ({ initialValues, action }) => {
       onDelete={handleDelete}
       itemName={initialValues?.name}
       lastModified={initialValues?.last_update}
+      isCommiting={isCommiting}
     >
       <FormTitle>Tags</FormTitle>
       <NameField>

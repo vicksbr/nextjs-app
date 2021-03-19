@@ -1,27 +1,31 @@
 import { cors, runMiddleware } from "utils/api";
 import type { NextApiRequest, NextApiResponse } from "next";
-import { itemsData } from "mockedData";
+import { supabaseClient } from '../../../../lib/supabase';
+
 
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   await runMiddleware(req, res, cors(["PATCH", "DELETE"]));
 
-  const { body, query: { id } } = req;
+  const {
+    query: { id },
+    body
+  } = req;
 
   switch (req.method) {
     case "PATCH":
-      const layoutToEdit = itemsData.layouts.findIndex((layout) => layout.id === id);
-      itemsData.layouts[layoutToEdit] = {
-        ...itemsData.layouts[layoutToEdit],
-        ...body,
-        last_update: new Date().getTime()
-      };
-      res.statusCode = 200;
-      res.json({});
+      const { 
+        data: layoutData, 
+        error: layoutError 
+      } = await supabaseClient.from('layouts').update({ ...body, last_update: new Date().getTime() }).eq('id', id)  
+      if (layoutError) { res.statusCode == 400; res.json(layoutError) }
+      res.statusCode == 200
+      res.json(layoutData)
       break;
     case "DELETE":
-      itemsData.layouts = itemsData.layouts.filter((layout) => layout.id !== id);
+      const { data, error } = await supabaseClient.from('layouts').delete().match({id: id as string}) 
+      if (error) { res.statusCode = 400; res.json(error) }
       res.statusCode = 200;
-      res.json({});
+      res.json(data);
       break;
     default:
       res.statusCode = 400;

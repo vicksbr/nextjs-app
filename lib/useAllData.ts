@@ -13,6 +13,8 @@ const sanitizeWindowsRank = (items: WindowData[]) => {
   });
 };
 
+
+
 export const useAllData = () => {
         
   const { data: windows, error: windowsError } = useSWR(`/api/curated/windows`);

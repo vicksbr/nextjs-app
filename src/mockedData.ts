@@ -180,10 +180,9 @@ export const itemsData: CurationData = {
 
 export const fullWindowsData: FullWindowData[] = [
   {
-    name: "World News",
-    last_update: new Date(2019, 5, 11).getTime(),
-    type: "flux",
     id: "window1",
+    name: "World News",
+    type: "flux",
     description: "The hottest gaming news",
     tags: [
       {
@@ -212,7 +211,7 @@ export const fullWindowsData: FullWindowData[] = [
       },
     ],
     thumbnail:
-      "https://i.picsum.photos/id/38/460/460.jpg?hmac=xmyt6kZw_mADqCdDa7ab4-FAFQHpGnYjKkiNELPVVpQ",
+    "https://i.picsum.photos/id/38/460/460.jpg?hmac=xmyt6kZw_mADqCdDa7ab4-FAFQHpGnYjKkiNELPVVpQ",
     active: true,
     featured: true,
     created_from: {
@@ -221,6 +220,7 @@ export const fullWindowsData: FullWindowData[] = [
       board: "2d52b358-dab4-4665-b734-e9f4a40a56a0",
       window: "2d52b358-dab4-4665-b734-e9f4a40a56a1",
     },
+    last_update: new Date(2019, 5, 11).getTime(),
   },
   {
     name: "USD BRL",

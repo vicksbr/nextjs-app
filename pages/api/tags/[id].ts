@@ -12,11 +12,11 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
 
   switch (req.method) {
     case "PATCH":
-      const { data: tagData, error: tagError } = await supabaseClient.from('tags').update({ name }).eq('id', id)  
-      if (tagError) { 
-        res.statusCode == 400
-        res.json(tagError)
-      }
+      const { 
+        data: tagData, error: tagError 
+      } = await supabaseClient.from('tags').update({ name, last_update: new Date().getTime() }).eq('id', id)  
+      
+      if (tagError) { res.statusCode == 400; res.json(tagError) }
       res.statusCode == 200
       res.json(tagData)
       break;

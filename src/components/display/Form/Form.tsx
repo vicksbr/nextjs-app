@@ -8,10 +8,11 @@ type FormProps = {
   itemName?: string;
   lastModified?: number;
   ref?: any;
+  isCommiting?: boolean;
 }
 
 const Form: React.FC<FormProps> = forwardRef<HTMLFormElement, FormProps>(
-  ({ children, onSubmit, onDelete, itemName = "", lastModified }, ref) => {
+  ({ children, onSubmit, onDelete, itemName = "", lastModified, isCommiting }, ref) => {
     return (
       <form onSubmit={onSubmit} ref={ref}>
         {children}
@@ -19,6 +20,7 @@ const Form: React.FC<FormProps> = forwardRef<HTMLFormElement, FormProps>(
           lastModified={lastModified}
           itemName={itemName}
           handleDelete={onDelete}
+          isCommiting={isCommiting}
         />
       </form>
     )

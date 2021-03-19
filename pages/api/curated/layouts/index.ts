@@ -1,30 +1,30 @@
-import { cors, runMiddleware, randomUUID } from "utils/api";
+import { cors, runMiddleware } from "utils/api";
 import type { NextApiRequest, NextApiResponse } from "next";
-import { itemsData } from "mockedData";
+import { supabaseClient } from '../../../../lib/supabase';
+
 
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   await runMiddleware(req, res, cors(["GET", "POST"]));
-
-  const { body, method, query } = req
-
-  switch (method) {
+  const { body } = req;
+  
+  switch (req.method) {
     case "GET":
-      res.statusCode = 200;
-      if (query.name) {
-        res.json(itemsData.layouts.filter((layout) => layout.name === query.name));
+      if (req.query.name) {        
+        const { data, error } = await supabaseClient.from('layouts').select('name').filter('name', 'eq', req.query.name)
+        if (error) { res.statusCode = 400; res.json(error) }
+        res.json(data)
       } else {
-        res.json(itemsData.layouts);
+        const {data , error} = await supabaseClient.from('layouts').select()
+        if (error) { res.statusCode = 400;  res.json(error) }
+        res.json(data);
       }
       break;
     case "POST":
-      const newLayout = {
-        ...body,
-        last_update: new Date().getTime(),
-        id: randomUUID(),
-      };
-      itemsData.layouts.push(newLayout);
+      const newLayout = { ...body, last_update: new Date().getTime() };      
+      const { data, error } = await supabaseClient.from('layouts').insert(newLayout)
+      if (error) { res.statusCode = 400; res.json(error); }
       res.statusCode = 200;
-      res.json(newLayout);
+      res.json([...data as Array<any>].shift())
       break;
     default:
       res.statusCode = 400;

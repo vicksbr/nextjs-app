@@ -18,6 +18,7 @@ import {
 type SubmitBarProps = {
   lastModified?: number;
   itemName: string;
+  isCommiting?: boolean;
   handleDelete: () => void;
   handleSubmit?: () => void;
 };
@@ -26,6 +27,7 @@ const SubmitBar: React.FC<SubmitBarProps> = ({
   itemName,
   handleDelete,
   handleSubmit,
+  isCommiting = false,
 }) => {
   const [dialogOpen, setDialogOpen] = useState(false);
 
@@ -41,7 +43,6 @@ const SubmitBar: React.FC<SubmitBarProps> = ({
 
   const handleDeleteFn = () => {
     const currentView = router.pathname.split("/")[1];
-
     handleDelete()
     setDialogOpen(false);
     router.push(`/${currentView}`)
@@ -49,8 +50,7 @@ const SubmitBar: React.FC<SubmitBarProps> = ({
 
   return (
     <SubmitBarContainer>
-
-      <DeleteButton variant="contained" type="button" onClick={handleOpenDialog}>
+      <DeleteButton variant="contained" type="button" onClick={handleOpenDialog} disabled={isCommiting}>
         <DeleteOutline />
       </DeleteButton>
       {lastModified && (
@@ -58,7 +58,7 @@ const SubmitBar: React.FC<SubmitBarProps> = ({
           Last Modify on {formatDate(lastModified)}
         </LastModifiedDate>
       )}
-      <Button variant="contained" type="submit" onClick={handleSubmit}>
+      <Button variant="contained" type="submit" onClick={handleSubmit} disabled={isCommiting}>
         save changes
       </Button>
       <Dialog open={dialogOpen} onClose={handleCloseDialog}>

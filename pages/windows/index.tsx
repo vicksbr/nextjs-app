@@ -11,9 +11,7 @@ const WindowsPage: React.FC = () => {
   const { user } = useUser({ redirectTo: "/login" });
   const router = useRouter();
 
-  const {
-    data: { layouts, categories, tags },
-  } = useAllData();
+  const { data: { layouts, categories, tags } } = useAllData();
 
   if (!user?.isLoggedIn) return <>Loading</>;
   if (!router.query.create) return <Empty />;
