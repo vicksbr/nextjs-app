@@ -37,6 +37,7 @@ import Snapshot from "./snapshot";
 import useForm from "../../../../lib/useForm";
 import Form from "../Form/Form";
 import fetchJson from "../../../../lib/fetchJson";
+import { useAllData } from "../../../../lib/useAllData";
 
 const emptyInitialValues = {
   name: "",
@@ -91,6 +92,9 @@ const WindowForm: React.FC<WindowFormProps> = ({
   const [status, setStatus] = useState({ active: false, featured: false });
   const [snapshotInfo, setSnapshotInfo] = useState<SnapshotInfo | null>(null);
   const router = useRouter();
+  const {
+    mutate: { windowsMutate },
+  } = useAllData({ filtered: true });
   const curatedWindowId = router.query.id;
 
   const updateValue = (field: string, value: any) => {
@@ -199,6 +203,7 @@ const WindowForm: React.FC<WindowFormProps> = ({
     }
 
     mutate("/api/curated/windows");
+    windowsMutate();
   };
 
   const handleDelete = async () => {
@@ -209,6 +214,7 @@ const WindowForm: React.FC<WindowFormProps> = ({
     });
 
     mutate("/api/curated/windows");
+    windowsMutate();
   };
 
   return (

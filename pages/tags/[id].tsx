@@ -3,8 +3,8 @@ import { useRouter } from "next/router";
 
 import TagForm from "components/display/tagForm";
 
-import useUser from "../../lib/useUser";
 import { useAllData } from "../../lib/useAllData";
+import useUser from "../../lib/useUser";
 
 import type { TagData } from "types";
 

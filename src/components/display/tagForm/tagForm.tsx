@@ -10,6 +10,7 @@ import { FormTitle, FieldLabel } from "../styles";
 
 import { TagData } from "types";
 import fetchJson from "../../../../lib/fetchJson";
+import { useAllData } from "../../../../lib/useAllData";
 
 type TagFormProps = {
   action: "create" | "update";
@@ -21,6 +22,9 @@ type SubmitFields = Pick<TagData, "name">;
 const TagForm: React.FC<TagFormProps> = ({ initialValues, action }) => {
   const router = useRouter();
   const { handleSubmit, register } = useForm();
+  const {
+    mutate: { tagsMutate },
+  } = useAllData({ filtered: true });
 
   const handleUpdate = async (formValues: SubmitFields | any) => {
     const id = initialValues?.id;
@@ -45,6 +49,7 @@ const TagForm: React.FC<TagFormProps> = ({ initialValues, action }) => {
     }
 
     mutate("/api/tags");
+    tagsMutate();
   };
 
   const handleDelete = async () => {
@@ -55,6 +60,7 @@ const TagForm: React.FC<TagFormProps> = ({ initialValues, action }) => {
     });
 
     mutate("/api/tags");
+    tagsMutate();
   };
 
   return (

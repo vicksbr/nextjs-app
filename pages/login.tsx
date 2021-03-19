@@ -20,7 +20,7 @@ const Login = () => {
 
     try {
       await mutateUser(
-        fetchJson("/api/login", {
+        fetchJson("/api/auth", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify(body),

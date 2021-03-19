@@ -10,6 +10,7 @@ import useForm from "../../../../lib/useForm";
 import fetchJson from "../../../../lib/fetchJson";
 import { FormGrid } from "./styles";
 import { FormTitle, FieldLabel } from "../styles";
+import { useAllData } from "../../../../lib/useAllData";
 
 type CategoryFormProps = {
   action: "create" | "update";
@@ -21,6 +22,9 @@ const CategoryForm: React.FC<CategoryFormProps> = ({
 }) => {
   const router = useRouter();
   const { handleSubmit, register } = useForm();
+  const {
+    mutate: { categoriesMutate },
+  } = useAllData({ filtered: true });
 
   const handleUpdate = async (formValues: any) => {
     const id = initialValues?.id;
@@ -48,6 +52,7 @@ const CategoryForm: React.FC<CategoryFormProps> = ({
     }
 
     mutate("/api/categories");
+    categoriesMutate();
   };
 
   const handleDelete = async () => {
@@ -58,11 +63,12 @@ const CategoryForm: React.FC<CategoryFormProps> = ({
     });
 
     mutate("/api/categories");
+    categoriesMutate();
   };
 
   return (
     <Form
-      onSubmit={(e: any) => handleSubmit(e, handleUpdate)}
+      onSubmit={(e) => handleSubmit(e, handleUpdate)}
       onDelete={handleDelete}
       itemName={initialValues?.name}
       lastModified={initialValues?.last_update}
