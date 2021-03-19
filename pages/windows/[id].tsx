@@ -13,9 +13,7 @@ const WindowsDynamic: React.FC = () => {
   const router = useRouter();
   const { user } = useUser({ redirectTo: "/login" });
 
-  const {
-    data: { layouts, categories, tags },
-  } = useAllData();
+  const { data: { layouts, categories, tags }, } = useAllData();
 
   const itemId = router.query.id;
   const { data: item } = useSWR(`/api/curated/windows/${itemId}`);

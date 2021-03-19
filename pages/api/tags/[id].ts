@@ -24,7 +24,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
       const { data, error } = await supabaseClient.from('tags').delete().match({id: id as string}) 
       if (error) { 
         res.statusCode = 400;
-        res.json({error})
+        res.json(error)
       }
       res.statusCode = 200;
       res.json(data);
