@@ -45,9 +45,7 @@ const sanitizeWindowsRank = (items: WindowData[]) => {
 
 
 export const useAllData = () => {
-  // const searchTerm = useSelector<StoreState, StoreState["searchTerm"]>(
-  //   (state: any) => state.searchTerm
-  // );
+  // const searchTerm = useSelector<StoreState, StoreState["searchTerm"]>(useAllData
   // const filters = useSelector<StoreState, StoreState["filters"]>(
   //   (state: any) => state.filters
   // );
@@ -55,17 +53,11 @@ export const useAllData = () => {
   // const windowsFilters = getFiltersQueryString(searchTerm, filters);
   // const searchFilter = getFiltersQueryString(searchTerm);
 
-  const routes = {
-    windows: `/api/curated/windows`,
-    layouts: `/api/curated/layouts`,
-    cats: `/api/categories`,
-    tags: `/api/tags`,
-  }
 
-  const { data: windows, error: windowsError } = useSWR(routes.windows);
-  const { data: layouts, error: layoutsError } = useSWR( routes.layouts);
-  const { data: categories, error: categoriesError } = useSWR(routes.cats);
-  const { data: tags, error: tagsError } = useSWR( routes.tags );
+  const { data: windows, error: windowsError } = useSWR('/api/curated/windows');
+  const { data: layouts, error: layoutsError } = useSWR(`/api/curated/layouts`);
+  const { data: categories, error: categoriesError } = useSWR(`/api/categories`);
+  const { data: tags, error: tagsError } = useSWR(`/api/tags`);
 
   const data = {
     windows: windows ? sanitizeWindowsRank(windows) : windows,
