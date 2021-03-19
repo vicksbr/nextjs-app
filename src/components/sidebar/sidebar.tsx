@@ -100,14 +100,13 @@ const Sidebar: React.FC<SidebarProps> = ({
   const theme = useTheme();
   const router = useRouter();
   const dispatch = useDispatch();
-  const { data } = useAllData();
-
   const { id } = router.query;
   const currentItem = id ?? null;
   const searchPlaceholder = currentView
     ? `Search ${capitalize(currentView)}`
     : "";
 
+  const { data } = useAllData();
   const items = currentView ? data[currentView as View] : [];
   const sortedItems = items ? [...items].sort(compareItems(sort)) : [];
 

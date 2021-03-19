@@ -62,7 +62,7 @@ const CategoryForm: React.FC<CategoryFormProps> = ({
 
   return (
     <Form
-      onSubmit={(e) => handleSubmit(e, handleUpdate)}
+      onSubmit={(e: any) => handleSubmit(e, handleUpdate)}
       onDelete={handleDelete}
       itemName={initialValues?.name}
       lastModified={initialValues?.last_update}
