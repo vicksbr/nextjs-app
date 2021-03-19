@@ -45,9 +45,7 @@ const sanitizeWindowsRank = (items: WindowData[]) => {
 
 
 export const useAllData = () => {
-  // const searchTerm = useSelector<StoreState, StoreState["searchTerm"]>(
-  //   (state: any) => state.searchTerm
-  // );
+  // const searchTerm = useSelector<StoreState, StoreState["searchTerm"]>(useAllData
   // const filters = useSelector<StoreState, StoreState["filters"]>(
   //   (state: any) => state.filters
   // );
