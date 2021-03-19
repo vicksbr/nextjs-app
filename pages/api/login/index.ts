@@ -1,19 +1,20 @@
-import { cors, runMiddleware } from "utils/api";
-import type { NextApiRequest, NextApiResponse } from "next";
+import withSession from "../../../lib/session"
 
-const handler = async (req: NextApiRequest, res: NextApiResponse) => {
-  await runMiddleware(req, res, cors(["POST"]));
+export default withSession(async(req: any, res: any) => {
+  
   switch (req.method) {
     case "POST":
       const { user, password } = req.body;
       
       if (user === "admin" && password === "admin") {
         res.statusCode = 200;
-        res.json({
-          "isLoggedIn":true,
+        req.session.set("user", {
           "name":"Fluxonauto da silva",
           "id":"999"
         });
+        await req.session.save();
+        res.status(200);
+        res.json({});
       } else {
         res.statusCode = 401;
         res.json({
@@ -25,6 +26,5 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
       res.statusCode = 400;
       break;
   }
-};
+})
 
-export default handler;

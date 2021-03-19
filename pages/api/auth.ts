@@ -1,28 +1,34 @@
 import withSession from "../../lib/session";
 
-const auth = async (user: string, password: string) =>
-  await fetch("/api/login", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({
-      user,
-      password,
-    }),
-  });
+
+// const isProd = process.env.NODE_ENV === "production"
+
+// const auth = async (user: string, password: string, origin: string) =>
+//   await fetch(`${isProd ? origin : ""}/api/login`, {
+//     method: "POST",
+//     headers: { "Content-Type": "application/json" },
+//     body: JSON.stringify({
+//       user,
+//       password,
+//     }),
+//   });
 
 export default withSession(async (req: any, res: any) => {
-  const { user: username, password } = await req.body;
+
+  const username = "fluxonaut da silva"
+
+
   try {
-    const response = await auth(username, password);
+    const response = {ok: true, status: 200}
     if (response.ok) {
       const user = { isLoggedIn: true, username };
       req.session.set("user", user);
       await req.session.save();
       res.status(response.status);
-      res.json({ user: username, password });
+      res.json({ user: username });
     } else {
       res.status(response.status);
-      const resBody = await response.json();
+      const resBody = {'message': 'deu rui'}
       res.json(resBody);
     }
   } catch (error) {
