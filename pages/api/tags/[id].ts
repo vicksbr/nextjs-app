@@ -1,6 +1,6 @@
 import { cors, runMiddleware } from "utils/api";
 import type { NextApiRequest, NextApiResponse } from "next";
-import { itemsData } from "mockedData";
+import { supabaseClient } from "../../../lib/supabase"
 
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   await runMiddleware(req, res, cors(["PATCH", "DELETE"]));
@@ -12,19 +12,22 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
 
   switch (req.method) {
     case "PATCH":
-      const tagToEdit = itemsData.tags.findIndex((tag) => tag.id === id);
-      const updatedTag = { name, last_update: new Date().getTime()};
-      itemsData.tags[tagToEdit] = {
-        ...itemsData.tags[tagToEdit],        
-        ...updatedTag, 
-      };
-      res.statusCode = 200;
-      res.json({});
+      const { data: tagData, error: tagError } = await supabaseClient.from('tags').update({ name }).eq('id', id)  
+      if (tagError) { 
+        res.statusCode == 400
+        res.json(tagError)
+      }
+      res.statusCode == 200
+      res.json(tagData)
       break;
     case "DELETE":
-      itemsData.tags = itemsData.tags.filter((tag) => tag.id !== id);
+      const { data, error } = await supabaseClient.from('tags').delete().match({id: id as string}) 
+      if (error) { 
+        res.statusCode = 400;
+        res.json({error})
+      }
       res.statusCode = 200;
-      res.json({});
+      res.json(data);
       break;
     default:
       res.statusCode = 400;
