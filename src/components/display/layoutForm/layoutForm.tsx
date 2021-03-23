@@ -35,7 +35,14 @@ const formOptions = {
 
 const LayoutForm: React.FC<LayoutFormProps> = ({ initialValues, action }) => {
   const router = useRouter();
-  const { handleSubmit, register, registerFields } = useForm(formOptions);
+  const {
+    handleSubmit,
+    register,
+    registerFields,
+    isCommiting,
+    setIsCommiting,
+  } = useForm(formOptions);
+
 
   const updateValue = (field: string, value: any) => {
     registerFields((prev) => ({
@@ -44,50 +51,61 @@ const LayoutForm: React.FC<LayoutFormProps> = ({ initialValues, action }) => {
     }));
   };
 
+
   const handleUpdate = async (formValues: LayoutFormFields) => {
     const id = initialValues?.id;
-    const newValues = {
-      name: formValues.name,
-      active: formValues.active === "true" ? true : false,
-      rank: formValues.rank,
-      thumbnail: formValues.thumbnail,
+    setIsCommiting(true)
+
+    const newItem = {
+      ...formValues,
+      active: formValues.active === "true" ? true : false
     };
 
-    if (action === "update") {
-      await fetchJson(`/api/curated/layouts/${id}`, {
-        method: "PATCH",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(newValues),
-      });
+    switch (action) {
+      case "update": {
+        await fetchJson(`/api/curated/layouts/${id}`, {
+          method: "PATCH",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(newItem),
+        });
+        await mutate("/api/curated/layouts");
+        setIsCommiting(false)
+        return
+      }
+      case "create": {
+        const response = await fetchJson(`/api/curated/layouts`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(newItem),
+        });
+        await mutate("/api/curated/layouts");
+        router.push(`/layouts/${response.id}`, undefined, { shallow: true });
+        setIsCommiting(false)
+        return
+      }
     }
-
-    if (action === "create") {
-      const response = await fetchJson(`/api/curated/layouts`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(newValues),
-      });
-      router.push(`/layouts/${response.id}`, undefined, { shallow: true });
-    }
-    mutate("/api/curated/layouts");
   };
 
   const handleDelete = async () => {
     const id = initialValues?.id;
+    setIsCommiting(true)
     await fetchJson(`/api/curated/layouts/${id}`, {
       method: "DELETE",
       headers: { "Content-Type": "application/json" },
     });
-
-    mutate("/api/curated/layouts");
+    await mutate("/api/curated/layouts");
+    setIsCommiting(false)
+    router.push(`/layouts`)
   };
+
 
   return (
     <Form
       onSubmit={(e) => handleSubmit(e, handleUpdate)}
-      onDelete={handleDelete}
+      onDelete={action === "update" ? handleDelete : undefined}
       itemName={initialValues?.name}
       lastModified={initialValues?.last_update}
+      isCommiting={isCommiting}
     >
       <FormTitle>Layouts</FormTitle>
       <FormGrid>

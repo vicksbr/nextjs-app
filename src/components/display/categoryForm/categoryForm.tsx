@@ -20,54 +20,56 @@ const CategoryForm: React.FC<CategoryFormProps> = ({
   action,
 }) => {
   const router = useRouter();
-  const { handleSubmit, register } = useForm();
-
+  const { handleSubmit, register, isCommiting, setIsCommiting } = useForm();
 
   const handleUpdate = async (formValues: any) => {
     const id = initialValues?.id;
-    const newValues = {
-      name: formValues.name,
-      rank: formValues.rank,
-    };
+    setIsCommiting(true)
 
-    if (action === "update") {
-      await fetchJson(`/api/categories/${id}`, {
-        method: "PATCH",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(newValues),
-      });
+    switch (action) {
+      case "update": {
+        await fetchJson(`/api/categories/${id}`, {
+          method: "PATCH",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(formValues),
+        });
+        await mutate("/api/categories");
+        setIsCommiting(false)
+        return
+      }
+      case "create": {
+        const response = await fetchJson(`/api/categories`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(formValues),
+        });
+        await mutate("/api/categories");
+        router.push(`/categories/${response.id}`, undefined, { shallow: true });
+        setIsCommiting(false)
+        return
+      }
     }
-
-    if (action === "create") {
-      const response = await fetchJson(`/api/categories`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(newValues),
-      });
-
-      router.push(`/categories/${response.id}`, undefined, { shallow: true });
-    }
-
-    mutate("/api/categories");
-
   };
 
   const handleDelete = async () => {
     const id = initialValues?.id;
+    setIsCommiting(true)
     await fetchJson(`/api/categories/${id}`, {
       method: "DELETE",
       headers: { "Content-Type": "application/json" },
     });
-
-    mutate("/api/categories");
+    await mutate("/api/categories");
+    setIsCommiting(false)
+    router.push(`/categories`, undefined, { shallow: true });
   };
 
   return (
     <Form
       onSubmit={(e) => handleSubmit(e, handleUpdate)}
-      onDelete={handleDelete}
+      onDelete={action === "update" ? handleDelete : undefined}
       itemName={initialValues?.name}
       lastModified={initialValues?.last_update}
+      isCommiting={isCommiting}
     >
       <FormTitle>Categories</FormTitle>
       <FormGrid>

@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import { useRouter } from "next/router";
 import { Button, Dialog } from "@material-ui/core";
 import { DeleteOutline } from "@material-ui/icons";
 
@@ -19,7 +18,7 @@ type SubmitBarProps = {
   lastModified?: number;
   itemName: string;
   isCommiting?: boolean;
-  handleDelete: () => void;
+  handleDelete?: () => void | null;
   handleSubmit?: () => void;
 };
 const SubmitBar: React.FC<SubmitBarProps> = ({
@@ -31,8 +30,6 @@ const SubmitBar: React.FC<SubmitBarProps> = ({
 }) => {
   const [dialogOpen, setDialogOpen] = useState(false);
 
-  const router = useRouter()
-
   const handleOpenDialog = () => {
     setDialogOpen(true);
   };
@@ -42,15 +39,15 @@ const SubmitBar: React.FC<SubmitBarProps> = ({
   };
 
   const handleDeleteFn = () => {
-    const currentView = router.pathname.split("/")[1];
-    handleDelete()
-    setDialogOpen(false);
-    router.push(`/${currentView}`)
+    if (handleDelete) {
+      handleDelete()
+      setDialogOpen(false);
+    }
   }
 
   return (
     <SubmitBarContainer>
-      <DeleteButton variant="contained" type="button" onClick={handleOpenDialog} disabled={isCommiting}>
+      <DeleteButton variant="contained" type="button" onClick={handleOpenDialog} disabled={handleDelete === undefined || isCommiting}>
         <DeleteOutline />
       </DeleteButton>
       {lastModified && (

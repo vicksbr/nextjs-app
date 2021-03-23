@@ -4,7 +4,7 @@ import SubmitBar from "../submitBar"
 
 type FormProps = {
   onSubmit: (e: any) => void;
-  onDelete: () => void;
+  onDelete?: () => void;
   itemName?: string;
   lastModified?: number;
   ref?: any;
