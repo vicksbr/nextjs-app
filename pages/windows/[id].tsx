@@ -13,9 +13,7 @@ const WindowsDynamic: React.FC = () => {
   const router = useRouter();
   const { user } = useUser({ redirectTo: "/login" });
 
-  const {
-    data: { layouts, categories, tags },
-  } = useAllData();
+  const { data: { layouts, categories, tags }, } = useAllData();
 
   const itemId = router.query.id;
   const { data: item } = useSWR(`/api/curated/windows/${itemId}`);
@@ -24,12 +22,11 @@ const WindowsDynamic: React.FC = () => {
 
   return (
     <WindowForm
-      action="update"
-      availableCategories={categories}
-      availableLayouts={layouts}
-      availableTags={tags}
+      availableCategories={categories || []}
+      availableLayouts={layouts || []}
+      availableTags={tags || []}
       initialValues={item as FullWindowData}
-
+      action="update"
     />
   );
 };

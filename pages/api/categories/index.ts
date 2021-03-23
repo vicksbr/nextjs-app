@@ -1,38 +1,31 @@
-import { cors, runMiddleware, randomUUID } from "utils/api";
+import { cors, runMiddleware } from "utils/api";
 import type { NextApiRequest, NextApiResponse } from "next";
-import { itemsData } from "mockedData";
+import { supabaseClient } from "../../../lib/supabase"
 
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   await runMiddleware(req, res, cors(["GET", "POST"]));
 
-  const { body, method } = req
+  const { body: { name, rank }, method } = req
   
   switch (method) {
     case "GET":
       res.statusCode = 200;
       if (req.query.name) {
-        res.json(
-          itemsData.categories.filter(
-            (category) => category.name === req.query.name
-          )
-        );
+        const { data, error } = await supabaseClient.from('categories').select('name').filter('name', 'eq', req.query.name)
+        if (error) { res.statusCode = 400;  res.json(error) }
+        res.json(data)
       } else {
-        res.json(itemsData.categories);
+        const {data , error} = await supabaseClient.from('categories').select()
+        if (error) { res.statusCode = 400; res.json(error) }
+        res.json(data);
       }
       break;
     case "POST":
-      const newCat = {
-        ...body,
-        last_update: new Date().getTime(),
-        id: randomUUID(),
-      };
-      itemsData.categories.push(newCat);
+      const newCategory = { name: name, rank: rank, last_update: new Date().getTime() }
+      const { data, error } = await supabaseClient.from('categories').insert(newCategory)
+      if (error) { res.statusCode = 400; res.json(error) }
       res.statusCode = 200;
-      res.json({
-        name: newCat.name,
-        id: newCat.id,
-        rank: newCat.rank,
-      });
+      res.json([...data as Array<any>].shift())
       break;
     default:
       res.statusCode = 400;

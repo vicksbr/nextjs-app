@@ -69,7 +69,6 @@ const LayoutForm: React.FC<LayoutFormProps> = ({ initialValues, action }) => {
       });
       router.push(`/layouts/${response.id}`, undefined, { shallow: true });
     }
-
     mutate("/api/curated/layouts");
   };
 

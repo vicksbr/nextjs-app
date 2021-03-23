@@ -197,7 +197,6 @@ const WindowForm: React.FC<WindowFormProps> = ({
       });
       router.push(`/windows/${response.id}`, undefined, { shallow: true });
     }
-
     mutate("/api/curated/windows");
   };
 

@@ -22,6 +22,7 @@ const CategoryForm: React.FC<CategoryFormProps> = ({
   const router = useRouter();
   const { handleSubmit, register } = useForm();
 
+
   const handleUpdate = async (formValues: any) => {
     const id = initialValues?.id;
     const newValues = {
@@ -48,6 +49,7 @@ const CategoryForm: React.FC<CategoryFormProps> = ({
     }
 
     mutate("/api/categories");
+
   };
 
   const handleDelete = async () => {

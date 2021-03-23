@@ -45,6 +45,7 @@ const TagForm: React.FC<TagFormProps> = ({ initialValues, action }) => {
     }
 
     mutate("/api/tags");
+
   };
 
   const handleDelete = async () => {
